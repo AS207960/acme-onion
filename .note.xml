@@ -1,0 +1,7 @@
+<note title="Discussion Venues" removeInRFC="true">
+<t>Discussion of this document takes place on the
+    Automated Certificate Management Environment Working Group mailing list (acme@ietf.org),
+    which is archived at <eref target="https://mailarchive.ietf.org/arch/browse/acme/"/>.</t>
+<t>Source for this draft and an issue tracker can be found at
+    <eref target="https://github.com/AS207960/acme-onion"/>.</t>
+</note>
