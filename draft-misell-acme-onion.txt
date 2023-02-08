@@ -53,10 +53,11 @@ Table of Contents
      1.1.  Requirements Language
    2.  Identifier
    3.  Identifier Validation Challenges
-     3.1.  Existing "dns-01" Challenge
-     3.2.  Existing "http-01" Challenge
-     3.3.  Existing "tls-alpn-01" Challenge
-     3.4.  New "onion-csr-01" Challenge
+     3.1.  Existing challenges
+       3.1.1.  Existing "dns-01" Challenge
+       3.1.2.  Existing "http-01" Challenge
+       3.1.3.  Existing "tls-alpn-01" Challenge
+     3.2.  New "onion-csr-01" Challenge
    4.  Certification Authority Authorization (CAA) alternative
    5.  IANA Considerations
      5.1.  Validation Methods
@@ -122,20 +123,24 @@ Table of Contents
    domains.  This document incorporates these methods into ACME
    challenges.
 
-3.1.  Existing "dns-01" Challenge
+3.1.  Existing challenges
+
+   TODO
+
+3.1.1.  Existing "dns-01" Challenge
 
    The existing "dns-01" challenge MUST NOT be used to validate ".onion"
    domains.
 
-3.2.  Existing "http-01" Challenge
+3.1.2.  Existing "http-01" Challenge
 
    TODO
 
-3.3.  Existing "tls-alpn-01" Challenge
+3.1.3.  Existing "tls-alpn-01" Challenge
 
    TODO
 
-3.4.  New "onion-csr-01" Challenge
+3.2.  New "onion-csr-01" Challenge
 
    The two methods already defined in ACME and allowed by the CA/BF do
    not allow issuance of wildcard certificates.  This new validation
