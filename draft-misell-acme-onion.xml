@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-model href="rfc7991bis.rnc"?>
+<!DOCTYPE rfc [
+  <!ENTITY nbsp    "&#160;">
+  <!ENTITY zwsp   "&#8203;">
+  <!ENTITY nbhy   "&#8209;">
+  <!ENTITY wj     "&#8288;">
+]>
+
+<rfc
+        xmlns:xi="http://www.w3.org/2001/XInclude"
+        ipr="trust200902" submissionType="IETF" updates="RFC8555" version="3">
+  <front>
+    <title abbrev="ACME for .onion Domains">Automated Certificate Management Environment (ACME) Extensions for ".onion" Domain Names</title>
+    <seriesInfo name="Internet-Draft" status="standard" value="draft-misell-acme-onion-latest"/>
+    <author fullname="Q Misell" initials="Q" role="editor" surname="Misell">
+      <organization abbrev="AS207960">AS207960 Cyfyngedig</organization>
+      <address>
+        <postal>
+          <street>13 Pen-y-lan Terrace</street>
+          <city>Caerdydd</city>
+          <region>Cymru</region>
+          <code>CF23 9EU</code>
+          <country>United Kingdom</country>
+        </postal>
+        <email>q@as207970.net</email>
+        <uri>https://magicalcodewit.ch</uri>
+      </address> 
+    </author>
+    <area>sec</area>
+    <workgroup>Internet Engineering Task Force</workgroup>
+    <date year="2023"/>
+    
+    <abstract>
+      <t>TODO</t>
+    </abstract>
+  </front>
+  
+  <middle>
+    <section>
+      <name>Introduction</name>
+      <t>TODO</t>
+
+      <section>
+        <name>Requirements Language</name>
+        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL",
+          "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT
+          RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
+          interpreted as described in BCP 14 <xref target="RFC2119"/>
+          <xref target="RFC8174"/> when, and only when, they appear in
+          all capitals, as shown here.</t>
+      </section>
+    </section>
+
+    <section anchor="IANA">
+      <name>IANA Considerations</name>
+      <t>TODO</t>
+    </section>
+
+    <section anchor="Security">
+      <name>Security Considerations</name>
+      <t>TODO</t>
+    </section>
+  </middle>
+
+  <back>
+    <references>
+      <name>References</name>
+      <references>
+        <name>Normative References</name>
+
+        <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2119.xml"/>
+        <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.8174.xml"/>
+
+      </references>
+    </references>
+
+    <section anchor="Acknowledgements" numbered="false">
+      <name>Acknowledgements</name>
+      <t>With thanks to the <link href="https://www.opentech.fund">Open Technology Fund</link> for funding the work
+        that went into this standard.</t>
+    </section>
+  </back>
+</rfc>
