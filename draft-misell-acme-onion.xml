@@ -81,16 +81,20 @@
         the CA industry for validation of ".onion" domains. This document incorporates these methods into ACME
         challenges.</t>
       <section>
-        <name>Existing "dns-01" Challenge</name>
-        <t>The existing "dns-01" challenge <bcp14>MUST NOT</bcp14> be used to validate ".onion" domains.</t>
-      </section>
-      <section>
-        <name>Existing "http-01" Challenge</name>
+        <name>Existing challenges</name>
         <t>TODO</t>
-      </section>
-      <section>
-        <name>Existing "tls-alpn-01" Challenge</name>
-        <t>TODO</t>
+        <section>
+          <name>Existing "dns-01" Challenge</name>
+          <t>The existing "dns-01" challenge <bcp14>MUST NOT</bcp14> be used to validate ".onion" domains.</t>
+        </section>
+        <section>
+          <name>Existing "http-01" Challenge</name>
+          <t>TODO</t>
+        </section>
+        <section>
+          <name>Existing "tls-alpn-01" Challenge</name>
+          <t>TODO</t>
+        </section>
       </section>
       <section>
         <name>New "onion-csr-01" Challenge</name>
