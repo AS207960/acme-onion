@@ -68,10 +68,16 @@
         insecure.</t>
       <t>Example identifiers:</t>
       <sourcecode type="json">
-{"type": "dns", "value": "bbcweb3hytmzhn5d532owbu6oqadra5z3ar726vq5kgwwn6aucdccrad.onion"}
+{
+  "type": "dns",
+  "value": "bbcweb3hytmzhn5d532owbu6oqadra5z3ar726vq5kgwwn6aucdccrad.onion"
+}
       </sourcecode>
       <sourcecode type="json">
-{"type": "dns", "value": "www.bbcweb3hytmzhn5d532owbu6oqadra5z3ar726vq5kgwwn6aucdccrad.onion"}
+{
+  "type": "dns",
+  "value": "www.bbcweb3hytmzhn5d532owbu6oqadra5z3ar726vq5kgwwn6aucdccrad.onion"
+}
       </sourcecode>
     </section>
 
