@@ -63,7 +63,7 @@
       <name>Identifier</name>
       <t><xref target="RFC8555"/> defines the "dns" identifier type. This identifier type <bcp14>MUST</bcp14> be used
         when requesting a certificate for a ".onion" domain. The value of identifier <bcp14>MUST</bcp14> be the textual
-        representation as defined in Section 3 of <xref target="tor-address-spec"/>. The value <bcp14>MAY</bcp14>
+        representation as defined in <xref target="tor-address-spec"/> §3. The value <bcp14>MAY</bcp14>
         include subdomain labels. Version 2 addresses <bcp14>MUST NOT</bcp14> be used as these are now considered
         insecure.</t>
       <t>Example identifiers:</t>
@@ -121,7 +121,7 @@
       <section>
         <name>Validation Methods</name>
         <t>Per this document, one new entry has been added to the "ACME Validation Methods" registry defined in
-          Section 9.7.8 of <xref target="RFC8555"/>. This entry is defined below:</t>
+          §9.7.8 of <xref target="RFC8555"/>. This entry is defined below:</t>
         <table>
           <name>New entries</name>
           <thead>
