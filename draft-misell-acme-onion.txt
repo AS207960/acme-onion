@@ -106,9 +106,9 @@ Table of Contents
    [RFC8555] defines the "dns" identifier type.  This identifier type
    MUST be used when requesting a certificate for a ".onion" domain.
    The value of identifier MUST be the textual representation as defined
-   in Section 3 of [tor-address-spec].  The value MAY include subdomain
-   labels.  Version 2 addresses MUST NOT be used as these are now
-   considered insecure.
+   in [tor-address-spec] §3.  The value MAY include subdomain labels.
+   Version 2 addresses MUST NOT be used as these are now considered
+   insecure.
 
    Example identifiers:
 
@@ -164,8 +164,8 @@ Table of Contents
 5.1.  Validation Methods
 
    Per this document, one new entry has been added to the "ACME
-   Validation Methods" registry defined in Section 9.7.8 of [RFC8555].
-   This entry is defined below:
+   Validation Methods" registry defined in §9.7.8 of [RFC8555].  This
+   entry is defined below:
 
     +==============+============+====+================================+
     | Label        | Identifier |ACME| Reference                      |
