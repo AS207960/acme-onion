@@ -32,6 +32,12 @@
     <abstract>
       <t>TODO</t>
     </abstract>
+
+    <note removeInRFC="true">
+      <name>Discussion</name>
+      <t>Source for this draft and an issue tracker can be found at
+        <eref target="https://github.com/AS207960/acme-onion"/>.</t>
+    </note>
   </front>
 
   <middle>
