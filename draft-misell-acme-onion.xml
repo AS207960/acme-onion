@@ -121,7 +121,7 @@
       <section>
         <name>Validation Methods</name>
         <t>Per this document, one new entry has been added to the "ACME Validation Methods" registry defined in
-          §9.7.8 of <xref target="RFC8555"/>. This entry is defined below:</t>
+          <xref target="RFC8555"/> §9.7.8. This entry is defined below:</t>
         <table>
           <name>New entries</name>
           <thead>
@@ -182,7 +182,7 @@
       <references>
         <name>Normative References</name>
 
-        <referencegroup anchor="BCP14">
+        <referencegroup anchor="BCP14" target="https://www.rfc-editor.org/info/bcp14">
           <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2119.xml"/>
           <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.8174.xml"/>
         </referencegroup>
