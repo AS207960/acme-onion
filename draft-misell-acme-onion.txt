@@ -164,8 +164,8 @@ Table of Contents
 5.1.  Validation Methods
 
    Per this document, one new entry has been added to the "ACME
-   Validation Methods" registry defined in §9.7.8 of [RFC8555].  This
-   entry is defined below:
+   Validation Methods" registry defined in [RFC8555] §9.7.8.  This entry
+   is defined below:
 
     +==============+============+====+================================+
     | Label        | Identifier |ACME| Reference                      |
@@ -218,6 +218,8 @@ Table of Contents
 
               Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, May 2017.
+
+              <https://www.rfc-editor.org/info/bcp14>
 
    [RFC7686]  Appelbaum, J. and A. Muffett, "The ".onion" Special-Use
               Domain Name", RFC 7686, DOI 10.17487/RFC7686, October
