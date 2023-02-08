@@ -7,9 +7,8 @@
   <!ENTITY wj     "&#8288;">
 ]>
 
-<rfc
-        xmlns:xi="http://www.w3.org/2001/XInclude"
-        ipr="trust200902" submissionType="IETF" updates="RFC8555" version="3">
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude"
+     ipr="trust200902" submissionType="IETF" category="std" updates="RFC8555" version="3">
   <front>
     <title abbrev="ACME for .onion Domains">Automated Certificate Management Environment (ACME) Extensions for ".onion" Domain Names</title>
     <seriesInfo name="Internet-Draft" status="standard" value="draft-misell-acme-onion-latest"/>
@@ -19,47 +18,151 @@
         <postal>
           <street>13 Pen-y-lan Terrace</street>
           <city>Caerdydd</city>
-          <region>Cymru</region>
           <code>CF23 9EU</code>
           <country>United Kingdom</country>
         </postal>
+        <email>q@magicalcodewit.ch</email>
         <email>q@as207970.net</email>
         <uri>https://magicalcodewit.ch</uri>
-      </address> 
+      </address>
     </author>
     <area>sec</area>
     <workgroup>Internet Engineering Task Force</workgroup>
-    <date year="2023"/>
-    
+
     <abstract>
       <t>TODO</t>
     </abstract>
   </front>
-  
+
   <middle>
     <section>
       <name>Introduction</name>
-      <t>TODO</t>
+      <t>The Tor network has the ability to host "Onion Services" <xref target="tor-rend-spec-v3"/>
+        <xref target="tor-address-spec"/> only accessible via the Tor network. These use the special use ".onion"
+        top-level domain <xref target="RFC7686"/> to identify these services. These can be used as any other domain
+        name could, but do not form part of the DNS infrastructure.</t>
+      <t>The Automated Certificate Management Environment (ACME) <xref target="RFC8555"/> defines challenges for
+        validating control of DNS identifiers, and whilst a ".onion" domain may appear as a DNS name, it requires
+        special consideration to validate control of one such that ACME could be used on ".onion" domains.</t>
+      <t>In order to allow ACME to be utilised to issue certificates to ".onion" domains this document specifies
+        challenges suitable to validate control of these domains. Additionally this document defines an alternative
+        to the DNS Certification Authority Authorization (CAA) Resource Record <xref target="RFC8659"/> that can be
+        used with ".onion" domains.</t>
 
       <section>
         <name>Requirements Language</name>
-        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL",
-          "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT
-          RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
-          interpreted as described in BCP 14 <xref target="RFC2119"/>
-          <xref target="RFC8174"/> when, and only when, they appear in
-          all capitals, as shown here.</t>
+        <t>The key words <bcp14>MUST</bcp14>, <bcp14>MUST NOT</bcp14>, <bcp14>REQUIRED</bcp14>, <bcp14>SHALL</bcp14>,
+          <bcp14>SHALL NOT</bcp14>, <bcp14>SHOULD</bcp14>, <bcp14>SHOULD NOT</bcp14>, <bcp14>RECOMMENDED</bcp14>,
+          <bcp14>NOT RECOMMENDED</bcp14>, <bcp14>MAY</bcp14>, and <bcp14>OPTIONAL</bcp14> in this document are to be
+          interpreted as described in BCP 14 <xref target="BCP14"/> when, and only when, they appear in all capitals,
+          as shown here.</t>
       </section>
+    </section>
+
+    <section>
+      <name>Identifier</name>
+      <t><xref target="RFC8555"/> defines the "dns" identifier type. This identifier type <bcp14>MUST</bcp14> be used
+        when requesting a certificate for a ".onion" domain. The value of identifier <bcp14>MUST</bcp14> be the textual
+        representation as defined in Section 3 of <xref target="tor-address-spec"/>. The value <bcp14>MAY</bcp14>
+        include subdomain labels. Version 2 addresses <bcp14>MUST NOT</bcp14> be used as these are now considered
+        insecure.</t>
+      <t>Example identifiers:</t>
+      <sourcecode type="json">
+{"type": "dns", "value": "bbcweb3hytmzhn5d532owbu6oqadra5z3ar726vq5kgwwn6aucdccrad.onion"}
+      </sourcecode>
+      <sourcecode type="json">
+{"type": "dns", "value": "www.bbcweb3hytmzhn5d532owbu6oqadra5z3ar726vq5kgwwn6aucdccrad.onion"}
+      </sourcecode>
+    </section>
+
+    <section>
+      <name>Identifier Validation Challenges</name>
+      <t>The CA/Browser Forum Baseline Requirements <xref target="cabf-br" /> §B.2 define methods accepted by
+        the CA industry for validation of ".onion" domains. This document incorporates these methods into ACME
+        challenges.</t>
+      <section>
+        <name>Existing "dns-01" Challenge</name>
+        <t>The existing "dns-01" challenge <bcp14>MUST NOT</bcp14> be used to validate ".onion" domains.</t>
+      </section>
+      <section>
+        <name>Existing "http-01" Challenge</name>
+        <t>TODO</t>
+      </section>
+      <section>
+        <name>Existing "tls-alpn-01" Challenge</name>
+        <t>TODO</t>
+      </section>
+      <section>
+        <name>New "onion-csr-01" Challenge</name>
+        <t>The two methods already defined in ACME and allowed by the CA/BF do not allow issuance of wildcard
+          certificates. This new validation method incorporates the specially signed CSR (as defined by
+          <xref target="cabf-br" /> §B.2.b) into ACME to allow for the issuance of wildcard certificates.</t>
+        <t>This validation method <bcp14>MUST NOT</bcp14> be used for non ".onion" domains.</t>
+      </section>
+    </section>
+
+    <section>
+      <name>Certification Authority Authorization (CAA) alternative</name>
+      <t>TODO</t>
     </section>
 
     <section anchor="IANA">
       <name>IANA Considerations</name>
-      <t>TODO</t>
+      <section>
+        <name>Validation Methods</name>
+        <t>Per this document, one new entry has been added to the "ACME Validation Methods" registry defined in
+          Section 9.7.8 of <xref target="RFC8555"/>. This entry is defined below:</t>
+        <table>
+          <name>New entries</name>
+          <thead>
+            <tr>
+              <th>Label</th>
+              <th>Identifier Type</th>
+              <th>ACME</th>
+              <th>Reference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>onion-csr-01</td>
+              <td>dns</td>
+              <td>Y</td>
+              <td>draft-misell-acme-onion-latest</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
     </section>
 
     <section anchor="Security">
       <name>Security Considerations</name>
-      <t>TODO</t>
+      <section anchor="security-id-dns">
+        <name>Use of "dns" identifier type</name>
+        <t>The re-use of the "dns" identifier type for a domain not actually in the DNS infrastructure raises questions
+          regarding its suitability. The reasons the author wish to pursue this path in the first place are detailed
+          in <xref target="use-of-id-dns"/>. It is felt that there is little security concern in reuse of the "dns"
+          identifier type with regards the mis-issuance by CAs that are not aware of ".onion" domains.</t>
+        <section>
+          <name>"http-01" Challenge</name>
+          <t>The CA would follow the procedure set out in <xref target="RFC8555"/> §8.3 which specifies that the CA
+            should "Dereference the URL using an HTTP GET request". Given that ".onion" require special handling to
+            dereference, this de-referencing will fail, disallowing issuance.</t>
+        </section>
+        <section>
+          <name>"tls-alpn-01" Challenge</name>
+          <t>The CA would follow the procedure set out in <xref target="RFC8737"/> §3 which specifies that the CA
+            "resolves the domain name being validated and chooses one of the IP addresses returned for validation".
+            Given that ".onion" are not resolvable to IP addresses, this de-referencing will fail, disallowing
+            issuance.</t>
+        </section>
+        <section>
+          <name>"dns-01" Challenge</name>
+          <t>The CA would follow the procedure set out in <xref target="RFC8555"/> §8.4 which specifies that the CA
+            should "query for TXT records for the validation domain name".
+            Given that ".onion" are not present in the DNS infrastructure, this query will fail, disallowing
+            issuance.</t>
+        </section>
+      </section>
     </section>
   </middle>
 
@@ -69,16 +172,78 @@
       <references>
         <name>Normative References</name>
 
-        <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2119.xml"/>
-        <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.8174.xml"/>
+        <referencegroup anchor="BCP14">
+          <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.2119.xml"/>
+          <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.8174.xml"/>
+        </referencegroup>
+        <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.7686.xml"/>
+        <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.8555.xml"/>
+        <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.8659.xml"/>
+        <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.8737.xml"/>
 
+        <reference anchor="tor-address-spec" target="https://spec.torproject.org/address-spec">
+          <front>
+            <title>Special Hostnames in Tor</title>
+            <author fullname="Nick Mathewson" initials="N." surname="Nick Mathewson">
+              <organization>The Tor Project</organization>
+            </author>
+          </front>
+        </reference>
+
+        <reference anchor="tor-rend-spec-v3" target="https://spec.torproject.org/rend-spec-v3">
+          <front>
+            <title>Tor Rendezvous Specification - Version 3</title>
+            <author>
+              <organization>The Tor Project</organization>
+            </author>
+          </front>
+        </reference>
+
+        <reference anchor="cabf-br" target="https://cabforum.org/wp-content/uploads/CA-Browser-Forum-BR-1.8.6.pdf">
+          <front>
+            <title>Baseline Requirements for the Issuance and Management of Publicly-Trusted Certificates</title>
+            <author>
+              <organization>CA/Browser Forum</organization>
+            </author>
+          </front>
+        </reference>
+
+      </references>
+      <references>
+        <name>Informative References</name>
+
+        <reference anchor="onion-services-setup" target="https://community.torproject.org/onion-services/setup/">
+          <front>
+            <title>Set Up Your Onion Service</title>
+            <author>
+              <organization>The Tor Project</organization>
+            </author>
+          </front>
+        </reference>
       </references>
     </references>
 
+    <section anchor="use-of-id-dns">
+      <name>Discussion on the use of the "dns" identifier type</name>
+      <t>The reasons for utilising the "dns" identifier type in ACME and not defining a new identifier type for
+        ".onion" domains may not seem obvious at first glance. After all, ".onion" domains are not part of the DNS
+        infrastructure and as such why should they use the "dns" identifier type?</t>
+      <t>The CA/Browser Forum Baseline Requirements <xref target="cabf-br"/> §B.2.a.ii define, and this standard allows,
+        using the "http-01" or "tls-alpn-01" validation methods already present in ACME (with some considerations).
+        Given the situation of a web server placed behind a Tor terminating proxy (as per the setup suggested by the
+        Tor project <xref target="onion-services-setup"/>), existing ACME tooling can be blind to the fact that a
+        ".onion" domain is being utilised, as they simply receive an incoming TCP connection as they would regardless
+        (albeit from the Tor terminating proxy).</t>
+      <t>An example of this would be Certbot placing the ACME challenge response file in the webroot of an NGINX web
+        server. Neither Certbot nor NGINX would require any modification to be aware of any special handling for
+        ".onion" domains.</t>
+      <t>This does raise some questions regarding security within existing implementations, however the authors believe
+        this is of little concern, as per <xref target="security-id-dns"/>.</t>
+    </section>
+
     <section anchor="Acknowledgements" numbered="false">
       <name>Acknowledgements</name>
-      <t>With thanks to the <link href="https://www.opentech.fund">Open Technology Fund</link> for funding the work
-        that went into this standard.</t>
+      <t>With thanks to the Open Technology Fund for funding the work that went into this document.</t>
     </section>
   </back>
 </rfc>
