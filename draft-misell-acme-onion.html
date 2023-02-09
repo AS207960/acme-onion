@@ -1040,7 +1040,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Misell</td>
-<td class="center">Expires 12 August 2023</td>
+<td class="center">Expires 13 August 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1056,12 +1056,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <a href="https://www.rfc-editor.org/rfc/rfcRFC8555" class="eref">RFC8555</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-02-08" class="published">8 February 2023</time>
+<time datetime="2023-02-09" class="published">9 February 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-08-12">12 August 2023</time></dd>
+<dd class="expires"><time datetime="2023-08-13">13 August 2023</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1084,6 +1084,8 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
 <p id="section-note.1-2">Source for this draft and an issue tracker can be found at
         <span><a href="https://github.com/AS207960/acme-onion">https://github.com/AS207960/acme-onion</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+<p id="section-note.1-3">The project website and a reference implementation can be found at
+        <span><a href="https://acmeforonions.org">https://acmeforonions.org</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
 </section>
 <div id="status-of-memo">
 <section id="section-boilerplate.1">
@@ -1104,7 +1106,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 12 August 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 13 August 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1174,6 +1176,9 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
                 <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-validation-methods" class="internal xref">Validation Methods</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-smi-security-for-pkix-certi" class="internal xref">SMI Security for PKIX Certificate Extension OID</a></p>
 </li>
             </ul>
 </li>
@@ -1284,7 +1289,6 @@ svg :is([fill="white"], [fill^="#fff"]) {
         <h3 id="name-existing-challenges">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-existing-challenges" class="section-name selfRef">Existing challenges</a>
         </h3>
-<p id="section-3.1-1">TODO<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <section id="section-3.1.1">
           <h4 id="name-existing-dns-01-challenge">
 <a href="#section-3.1.1" class="section-number selfRef">3.1.1. </a><a href="#name-existing-dns-01-challenge" class="section-name selfRef">Existing "dns-01" Challenge</a>
@@ -1295,13 +1299,43 @@ svg :is([fill="white"], [fill^="#fff"]) {
           <h4 id="name-existing-http-01-challenge">
 <a href="#section-3.1.2" class="section-number selfRef">3.1.2. </a><a href="#name-existing-http-01-challenge" class="section-name selfRef">Existing "http-01" Challenge</a>
           </h4>
-<p id="section-3.1.2-1">TODO<a href="#section-3.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.2-1">The "http-01" challenge is defined as in <span>[<a href="#RFC8555" class="cite xref">RFC8555</a>]</span> §8.3 may be used to validate a ".onion"
+            domain, with the following modifications.<a href="#section-3.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.2-2">The ACME server <span class="bcp14">MUST</span> make its own connection to the hidden service via the Tor network,
+            and <span class="bcp14">MUST NOT</span> outsource this, such as by using Tor2Web.<a href="#section-3.1.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.1.2-3">An additional field is defined to allow the ACME server to advertise the ed25519 public key it will use (as
+            per <span>[<a href="#tor-rend-spec-v3" class="cite xref">tor-rend-spec-v3</a>]</span> INTRO-AUTH) to authenticate itself during the introduction.
+            This allows the hidden service to obtain a certificate,<a href="#section-3.1.2-3" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-3.1.2-4">
+            <dt id="section-3.1.2-4.1">authKey (optional, object)</dt>
+            <dd style="margin-left: 1.5em" id="section-3.1.2-4.2">The Ed25519 public key encoded as per <span>[<a href="#RFC8037" class="cite xref">RFC8037</a>]</span>.<a href="#section-3.1.2-4.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<p id="section-3.1.2-5">ACME servers <span class="bcp14">MUST NOT</span> use the same public key with multiple hidden services.
+            ACME servers <span class="bcp14">MAY</span> re-use public keys for re-validation of the same hidden service.<a href="#section-3.1.2-5" class="pilcrow">¶</a></p>
+<p id="section-3.1.2-6">The ACME server <span class="bcp14">SHOULD</span> follow redirects; note that these may be redirects to non ".onion"
+            services, and the server <span class="bcp14">SHOULD</span> honour these.<a href="#section-3.1.2-6" class="pilcrow">¶</a></p>
 </section>
 <section id="section-3.1.3">
           <h4 id="name-existing-tls-alpn-01-challe">
 <a href="#section-3.1.3" class="section-number selfRef">3.1.3. </a><a href="#name-existing-tls-alpn-01-challe" class="section-name selfRef">Existing "tls-alpn-01" Challenge</a>
           </h4>
-<p id="section-3.1.3-1">TODO<a href="#section-3.1.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.3-1">The "tls-alpn-01" challenge is defined as in <span>[<a href="#RFC8737" class="cite xref">RFC8737</a>]</span> may be used to validate a ".onion"
+            domain, with the following modifications.<a href="#section-3.1.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.3-2">The ACME server <span class="bcp14">MUST</span> make its own connection to the hidden service via the Tor network,
+            and <span class="bcp14">MUST NOT</span> outsource this, such as by using Tor2Web.<a href="#section-3.1.3-2" class="pilcrow">¶</a></p>
+<p id="section-3.1.3-3">An additional field is defined to allow the ACME server to advertise the ed25519 public key it will use (as
+            per <span>[<a href="#tor-rend-spec-v3" class="cite xref">tor-rend-spec-v3</a>]</span> INTRO-AUTH) to authenticate itself during the introduction.
+            This allows the hidden service to obtain a certificate,<a href="#section-3.1.3-3" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-3.1.3-4">
+            <dt id="section-3.1.3-4.1">authKey (optional, object)</dt>
+            <dd style="margin-left: 1.5em" id="section-3.1.3-4.2">The Ed25519 public key encoded as per <span>[<a href="#RFC8037" class="cite xref">RFC8037</a>]</span>.<a href="#section-3.1.3-4.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<p id="section-3.1.3-5">ACME servers <span class="bcp14">MUST NOT</span> use the same public key with multiple hidden services.
+            ACME servers <span class="bcp14">MAY</span> re-use public keys for re-validation of the same hidden service.<a href="#section-3.1.3-5" class="pilcrow">¶</a></p>
 </section>
 </section>
 <section id="section-3.2">
@@ -1311,7 +1345,91 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-3.2-1">The two methods already defined in ACME and allowed by the CA/BF do not allow issuance of wildcard
           certificates. This new validation method incorporates the specially signed CSR (as defined by
           <span>[<a href="#cabf-br" class="cite xref">cabf-br</a>]</span> §B.2.b) into ACME to allow for the issuance of wildcard certificates.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2">This validation method <span class="bcp14">MUST NOT</span> be used for non ".onion" domains.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2-2">To this end a new challenge type called is defined, with the following fields:<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-3.2-3">
+          <dt id="section-3.2-3.1">type (required, string)</dt>
+          <dd style="margin-left: 1.5em" id="section-3.2-3.2">The string "onion-csr-01"<a href="#section-3.2-3.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-3.2-3.3">nonce (required, string)</dt>
+          <dd style="margin-left: 1.5em" id="section-3.2-3.4">A Base64 <span>[<a href="#RFC4648" class="cite xref">RFC4648</a>]</span> encoded nonce, including padding characters.
+            It <span class="bcp14">MUST</span> contain at least 64 bits of entropy. It <span class="bcp14">MUST NOT</span> be valid for more
+            than 30 days.<a href="#section-3.2-3.4" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+</dl>
+<div class="lang-json sourcecode" id="section-3.2-4">
+<pre>
+{
+  "type": "onion-csr-01",
+  "url": "https://example.com/acme/chall/bbc625c5",
+  "status": "pending",
+  "nonce": "bI6/MRqV4gw="
+}
+</pre><a href="#section-3.2-4" class="pilcrow">¶</a>
+</div>
+<p id="section-3.2-5">Clients may prove control over the key associated with the ".onion" service by generating their CSR with the
+          following additional attributes and signing it with the private key of the ".onion" domain:<a href="#section-3.2-5" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.2-6.1">A caSigningNonce attribute containing the nonce provided in the challenge. This <span class="bcp14">MUST NOT</span>
+            be base64 encoded in the CSR.<a href="#section-3.2-6.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-3.2-6.2">An applicantSigningNonce containing a nonce generated by the client. This <span class="bcp14">MUST</span> have at
+            least 64 bits of entropy.<a href="#section-3.2-6.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-3.2-6.3">An acmeAccountThumbprint containing the SHA256 JWK thumbprint (as per <span>[<a href="#RFC7638" class="cite xref">RFC7638</a>]</span>) of the
+            account key ordering the certificate.<a href="#section-3.2-6.3" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-3.2-7">These additional attributes have the following format<a href="#section-3.2-7" class="pilcrow">¶</a></p>
+<div class="lang-asn.1 sourcecode" id="section-3.2-8">
+<pre>
+id-pkix  OBJECT IDENTIFIER ::=
+  { iso(1) identified-organization(3) dod(6) internet(1) security(5)
+    mechanisms(5) pkix(7) }
+
+id-pe OBJECT IDENTIFIER ::= { id-pkix 1 }
+
+cabf OBJECT IDENTIFIER ::=
+  { joint-iso-itu-t(2) international-organizations(23)
+    ca-browser-forum(140) }
+
+cabf-caSigningNonce OBJECT IDENTIFIER ::= { cabf 41 }
+
+caSigningNonce ATTRIBUTE ::= {
+  WITH SYNTAX             OCTET STRING
+  EQUALITY MATCHING RULE  octetStringMatch
+  SINGLE VALUE            TRUE
+  ID                      { cabf-caSigningNonce }
+}
+
+cabf-applicantSigningNonce OBJECT IDENTIFIER ::= { cabf 42 }
+
+applicantSigningNonce ATTRIBUTE ::= {
+  WITH SYNTAX             OCTET STRING
+  EQUALITY MATCHING RULE  octetStringMatch
+  SINGLE VALUE            TRUE
+  ID                      { cabf-applicantSigningNonce }
+}
+
+id-pe-acmeAccountThumbprint OBJECT IDENTIFIER ::= { id-pe 34 }
+
+acmeAccountThumbprint ATTRIBUTE ::= {
+  WITH SYNTAX             OCTET STRING
+  EQUALITY MATCHING RULE  octetStringMatch
+  SINGLE VALUE            TRUE
+  ID                      { id-pe-acmeAccountThumbprint }
+}
+</pre><a href="#section-3.2-8" class="pilcrow">¶</a>
+</div>
+<p id="section-3.2-9">In a variation to the usual state machine of ACME, a client need not respond to the challenge. The act of
+          POSTing a CSR to the finalization endpoint is in itself a response to the challenge. The challenge and order
+          progress directly to either the "valid" or "invalid" state without passing through "processing" or "ready"
+          (respectively).<a href="#section-3.2-9" class="pilcrow">¶</a></p>
+<p id="section-3.2-10">In the case of a CSR posted to the finalization endpoint that does not include the above extensions
+          the order <span class="bcp14">SHOULD</span> remain in the "pending" state and <span class="bcp14">SHOULD NOT</span> transition to the
+          "invalid" state. Only in the case that an "onion-csr-01" CSR is POSTed to the finalization endpoint that
+          subsequently fails validation <span class="bcp14">MUST</span> the order transition to the "invalid" state.<a href="#section-3.2-10" class="pilcrow">¶</a></p>
 </section>
 </section>
 <section id="section-4">
@@ -1349,6 +1467,34 @@ svg :is([fill="white"], [fill^="#fff"]) {
               <td class="text-left" rowspan="1" colspan="1">onion-csr-01</td>
               <td class="text-left" rowspan="1" colspan="1">dns</td>
               <td class="text-left" rowspan="1" colspan="1">Y</td>
+              <td class="text-left" rowspan="1" colspan="1">draft-misell-acme-onion-latest</td>
+            </tr>
+          </tbody>
+        </table>
+</section>
+<section id="section-5.2">
+        <h3 id="name-smi-security-for-pkix-certi">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-smi-security-for-pkix-certi" class="section-name selfRef">SMI Security for PKIX Certificate Extension OID</a>
+        </h3>
+<p id="section-5.2-1">Per this document, within the "Structure of Management Information (SMI) Numbers (MIB Module Registrations)"
+          one new entry has been added to the "SMI Security for PKIX Certificate Extension" (1.3.6.1.5.5.7.1) table.
+          This entry is defined below:<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<span id="name-new-entries-2"></span><table class="center" id="table-2">
+          <caption>
+<a href="#table-2" class="selfRef">Table 2</a>:
+<a href="#name-new-entries-2" class="selfRef">New entries</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Decimal</th>
+              <th class="text-left" rowspan="1" colspan="1">Description</th>
+              <th class="text-left" rowspan="1" colspan="1">Reference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">34</td>
+              <td class="text-left" rowspan="1" colspan="1">id-pe-acmeAccountThumbprint</td>
               <td class="text-left" rowspan="1" colspan="1">draft-misell-acme-onion-latest</td>
             </tr>
           </tbody>
@@ -1418,9 +1564,21 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <span>&lt;<a href="https://www.rfc-editor.org/info/bcp14">https://www.rfc-editor.org/info/bcp14</a>&gt;</span>
 </dd>
 <dd class="break"></dd>
+<dt id="RFC4648">[RFC4648]</dt>
+        <dd>
+<span class="refAuthor">Josefsson, S.</span>, <span class="refTitle">"The Base16, Base32, and Base64 Data Encodings"</span>, <span class="seriesInfo">RFC 4648</span>, <span class="seriesInfo">DOI 10.17487/RFC4648</span>, <time datetime="2006-10" class="refDate">October 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc4648">https://www.rfc-editor.org/info/rfc4648</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7638">[RFC7638]</dt>
+        <dd>
+<span class="refAuthor">Jones, M.</span> and <span class="refAuthor">N. Sakimura</span>, <span class="refTitle">"JSON Web Key (JWK) Thumbprint"</span>, <span class="seriesInfo">RFC 7638</span>, <span class="seriesInfo">DOI 10.17487/RFC7638</span>, <time datetime="2015-09" class="refDate">September 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7638">https://www.rfc-editor.org/info/rfc7638</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC7686">[RFC7686]</dt>
         <dd>
 <span class="refAuthor">Appelbaum, J.</span> and <span class="refAuthor">A. Muffett</span>, <span class="refTitle">"The ".onion" Special-Use Domain Name"</span>, <span class="seriesInfo">RFC 7686</span>, <span class="seriesInfo">DOI 10.17487/RFC7686</span>, <time datetime="2015-10" class="refDate">October 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7686">https://www.rfc-editor.org/info/rfc7686</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8037">[RFC8037]</dt>
+        <dd>
+<span class="refAuthor">Liusvaara, I.</span>, <span class="refTitle">"CFRG Elliptic Curve Diffie-Hellman (ECDH) and Signatures in JSON Object Signing and Encryption (JOSE)"</span>, <span class="seriesInfo">RFC 8037</span>, <span class="seriesInfo">DOI 10.17487/RFC8037</span>, <time datetime="2017-01" class="refDate">January 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8037">https://www.rfc-editor.org/info/rfc8037</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8555">[RFC8555]</dt>
         <dd>
