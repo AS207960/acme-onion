@@ -8,10 +8,10 @@
 ]>
 
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
-     ipr="trust200902" submissionType="IETF" category="std" updates="RFC8555" version="3">
+     ipr="trust200902" submissionType="IETF" category="std" updates="RFC8555" version="3" docName="draft-misell-acme-onion-01">
   <front>
     <title abbrev="ACME for .onion Domains">Automated Certificate Management Environment (ACME) Extensions for ".onion" Domain Names</title>
-    <seriesInfo name="Internet-Draft" status="standard" value="draft-misell-acme-onion-latest"/>
+    <seriesInfo name="Internet-Draft" status="standard" value="draft-misell-acme-onion-01"/>
     <author fullname="Q Misell" initials="Q" role="editor" surname="Misell">
       <organization abbrev="AS207960">AS207960 Cyfyngedig</organization>
       <address>
