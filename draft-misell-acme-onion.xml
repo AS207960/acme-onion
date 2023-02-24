@@ -30,7 +30,8 @@
     <workgroup>Internet Engineering Task Force</workgroup>
 
     <abstract>
-      <t>TODO</t>
+      <t>The documents defines extensions to the Automated Certificate Management Environment (ACME) to allow for the
+        automatic issuance of certificates to Tor hidden services (".onion" domains).</t>
     </abstract>
 
     <note removeInRFC="true">
@@ -148,15 +149,22 @@
           <dd>A Base64 <xref target="RFC4648"/> encoded nonce, including padding characters.
             It <bcp14>MUST</bcp14> contain at least 64 bits of entropy. It <bcp14>MUST NOT</bcp14> be valid for more
             than 30 days.</dd>
+          <dt>authKey (optional, object)</dt>
+          <dd>The Ed25519 public key encoded as per <xref target="RFC8037"/>.</dd>
         </dl>
         <sourcecode type="json">
 {
   "type": "onion-csr-01",
   "url": "https://example.com/acme/chall/bbc625c5",
   "status": "pending",
-  "nonce": "bI6/MRqV4gw="
+  "nonce": "bI6/MRqV4gw=",
+  "authKey": { ... }
 }
         </sourcecode>
+        <t>An "authKey" field is defined to allow the ACME server to advertise the ed25519 public key it will use to
+          decrypt the second layer descriptor to check CAA records.</t>
+        <t>ACME servers <bcp14>MUST NOT</bcp14> use the same public key with multiple hidden services.
+          ACME servers <bcp14>MAY</bcp14> re-use public keys for re-validation of the same hidden service.</t>
         <t>Clients may prove control over the key associated with the ".onion" service by generating their CSR with the
           following additional attributes and signing it with the private key of the ".onion" domain:</t>
         <ul>
@@ -208,7 +216,68 @@ applicantSigningNonce ATTRIBUTE ::= {
 
     <section>
       <name>Certification Authority Authorization (CAA)</name>
-      <t>TODO</t>
+      <t>".onion" domains are not part of the DNS, and as such a variation on CAA <xref target="RFC8659"/> is required
+        to allow restrictions to be placed on certificate issuance.</t>
+      <t>To this end a new field is added to the second layer hidden service descriptor
+        <xref target="tor-rend-spec-v3" /> § 2.5.2.2. with the following format:</t>
+      <sourcecode>
+"caa" SP flags SP tag SP value NL
+[Any number of times]
+      </sourcecode>
+      <t>The contents of "flag", "tag", and "value" are as per <xref target="RFC8659"/> § 4.1.1. Multiple CAA records may
+       be present, as is the case in the DNS. CAA records in a hidden service descriptor are to be treated the same by
+       CAs as if they had been at the DNS for the ".onion" domain.</t>
+      <t>A hidden service's second layer descriptor using CAA may look something like the following:</t>
+      <sourcecode>
+create2-formats 2
+single-onion-service
+caa 0 issue "example.com"
+caa 0 iodef "mailto:security@example.com"
+caa 128 validationmethods "onion-csr-01"
+introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3KHCZUZ3C6tXDeRfM9SyNY0DlgbF8q+QSaGKCs=
+...
+      </sourcecode>
+      <section>
+        <name>Relevant Resource Record Set</name>
+        <t>In the absence of the possibility of delegation from a ".onion" domain as there is in the DNS there is no
+          need, nor indeed any possibility to search up a the DNS tree for a relevant CAA record set. Instead all
+          subdomains under a ".onion" domain share the same CAA record set. That is all of these share a CAA record
+          set with "a.onion":</t>
+        <ul>
+          <li>b.a.onion</li>
+          <li>c.a.onion</li>
+          <li>e.d.a.onion</li>
+        </ul>
+        <t>But these do not:</t>
+        <ul>
+          <li>b.c.onion</li>
+          <li>c.d.onion</li>
+          <li>e.c.d.onion</li>
+        </ul>
+      </section>
+      <section>
+        <name>When to check CAA</name>
+        <t>If the hidden service has client authentication enabled then it will be impossible for the CAA to decrypt
+          the second layer descriptor to read the CAA records until the CAAs public key has been added to first layer
+          descriptor. To this end a CA <bcp14>SHOULD</bcp14> wait until the client responds to an authorization, and
+          treat this as indication that their public key has been added and that the CA will be able to decrypt the
+          second layer descriptor.</t>
+      </section>
+      <section>
+        <name>Preventing mis-issuance by unknown CAs</name>
+        <t>As the CAA records are in the second layer descriptor and in the case of a hidden service requiring client
+          authentication it is impossible to read them without the hidden service trusting a CAs public key, a method is
+          required to signal that there are CAA records present (but not reveal their contents, which may disclose
+          unwanted information about the hidden service operator).</t>
+        <t>To this end a new field is added to the first layer hidden service descriptor
+          <xref target="tor-rend-spec-v3" /> § 2.5.1.2. with the following format:</t>
+        <sourcecode>
+"caa-critical" NL
+[At most once]
+        </sourcecode>
+        <t>If a CA encounters this flag it <bcp14>MUST NOT</bcp14> proceed with issuance until it can decrypt and
+          parse the CAA records from the second layer descriptor.</t>
+      </section>
     </section>
 
     <section anchor="IANA">
@@ -282,6 +351,12 @@ applicantSigningNonce ATTRIBUTE ::= {
         <name>Use of Tor for non ".onion" domains</name>
         <t>An ACME server <bcp14>MUST NOT</bcp14> utilise Tor for the validation of non ".onion" domains, due to the
           risk of possible exit hijacking.</t>
+      </section>
+      <section>
+        <name>Security of CAA records</name>
+        <t>The second layer descriptor is encrypted and MACed in a way that only a party with access to the secret key
+          of the hidden service could manipulate what is published there. For more information about this process see
+          <xref target="tor-rend-spec-v3"/> § 2.5.3.</t>
       </section>
     </section>
   </middle>
