@@ -4,13 +4,14 @@
 
 Internet Engineering Task Force                           Q. Misell, Ed.
 Internet-Draft                                                  AS207960
-Updates: RFC8555 (if approved)                          24 February 2023
+Updates: RFC8555 (if approved)                             14 March 2023
 Intended status: Standards Track                                        
-Expires: 28 August 2023
+Expires: 15 September 2023
 
 
    Automated Certificate Management Environment (ACME) Extensions for
                          ".onion" Domain Names
+                       draft-misell-acme-onion-01
 
 Abstract
 
@@ -43,7 +44,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 August 2023.
+   This Internet-Draft will expire on 15 September 2023.
 
 Copyright Notice
 
@@ -70,23 +71,24 @@ Table of Contents
        3.1.2.  Existing "http-01" Challenge
        3.1.3.  Existing "tls-alpn-01" Challenge
      3.2.  New "onion-csr-01" Challenge
-   4.  Certification Authority Authorization (CAA)
-     4.1.  Relevant Resource Record Set
-     4.2.  When to check CAA
-     4.3.  Preventing mis-issuance by unknown CAs
-   5.  IANA Considerations
-     5.1.  Validation Methods
-   6.  Security Considerations
-     6.1.  Use of "dns" identifier type
-       6.1.1.  "http-01" Challenge
-       6.1.2.  "tls-alpn-01" Challenge
-       6.1.3.  "dns-01" Challenge
-     6.2.  Key Authorization with "onion-csr-01"
-     6.3.  Use of Tor for non ".onion" domains
-     6.4.  Security of CAA records
-   7.  References
-     7.1.  Normative References
-     7.2.  Informative References
+   4.  Client authentication to hidden services
+   5.  Certification Authority Authorization (CAA)
+     5.1.  Relevant Resource Record Set
+     5.2.  When to check CAA
+     5.3.  Preventing mis-issuance by unknown CAs
+   6.  IANA Considerations
+     6.1.  Validation Methods
+   7.  Security Considerations
+     7.1.  Use of "dns" identifier type
+       7.1.1.  "http-01" Challenge
+       7.1.2.  "tls-alpn-01" Challenge
+       7.1.3.  "dns-01" Challenge
+     7.2.  Key Authorization with "onion-csr-01"
+     7.3.  Use of Tor for non ".onion" domains
+     7.4.  Security of CAA records
+   8.  References
+     8.1.  Normative References
+     8.2.  Informative References
    Appendix A.  Discussion on the use of the "dns" identifier type
    Acknowledgements
    Author's Address
@@ -165,8 +167,7 @@ Table of Contents
 
    An additional field is defined to allow the ACME server to advertise
    the ed25519 public key it will use (as per [tor-rend-spec-v3] INTRO-
-   AUTH) to authenticate itself during the introduction.  This allows
-   the hidden service to obtain a certificate,
+   AUTH) to authenticate itself during the introduction.
 
    authKey (optional, object)  The Ed25519 public key encoded as per
       [RFC8037].
@@ -190,8 +191,7 @@ Table of Contents
 
    An additional field is defined to allow the ACME server to advertise
    the ed25519 public key it will use (as per [tor-rend-spec-v3] INTRO-
-   AUTH) to authenticate itself during the introduction.  This allows
-   the hidden service to obtain a certificate,
+   AUTH) to authenticate itself during the introduction.
 
    authKey (optional, object)  The Ed25519 public key encoded as per
       [RFC8037].
@@ -230,10 +230,6 @@ Table of Contents
    An "authKey" field is defined to allow the ACME server to advertise
    the ed25519 public key it will use to decrypt the second layer
    descriptor to check CAA records.
-
-   ACME servers MUST NOT use the same public key with multiple hidden
-   services.  ACME servers MAY re-use public keys for re-validation of
-   the same hidden service.
 
    Clients may prove control over the key associated with the ".onion"
    service by generating their CSR with the following additional
@@ -290,7 +286,25 @@ Table of Contents
    finalization endpoint that subsequently fails validation MUST the
    order transition to the "invalid" state.
 
-4.  Certification Authority Authorization (CAA)
+4.  Client authentication to hidden services
+
+   The above validation method definitions include an "authKey" to allow
+   the CA to retrieve the descriptor of hidden service that has client
+   authentication enabled.
+
+   ACME servers MUST NOT use the same public key with multiple hidden
+   services.  ACME servers MAY re-use public keys for re-validation of
+   the same hidden service.
+
+   There is no method to communicate to the CA that client
+   authentication is required; instead the ACME server MUST attempt to
+   calculate its CLIENT-ID as per [tor-rend-spec-v3] FIRST-LAYER-CLIENT-
+   BEHAVIOR.  If no "auth-client" line in the first layer hidden service
+   descriptor matches the computed client-id then the server MUST assume
+   that the hidden service does not require client authentication and
+   proceed accordingly.
+
+5.  Certification Authority Authorization (CAA)
 
    ".onion" domains are not part of the DNS, and as such a variation on
    CAA [RFC8659] is required to allow restrictions to be placed on
@@ -319,7 +333,7 @@ Table of Contents
    introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3KHCZUZ3C6tXDeRfM9SyNY0DlgbF8q+QSaGKCs=
    ...
 
-4.1.  Relevant Resource Record Set
+5.1.  Relevant Resource Record Set
 
    In the absence of the possibility of delegation from a ".onion"
    domain as there is in the DNS there is no need, nor indeed any
@@ -342,7 +356,7 @@ Table of Contents
 
    *  e.c.d.onion
 
-4.2.  When to check CAA
+5.2.  When to check CAA
 
    If the hidden service has client authentication enabled then it will
    be impossible for the CAA to decrypt the second layer descriptor to
@@ -352,7 +366,7 @@ Table of Contents
    that their public key has been added and that the CA will be able to
    decrypt the second layer descriptor.
 
-4.3.  Preventing mis-issuance by unknown CAs
+5.3.  Preventing mis-issuance by unknown CAs
 
    As the CAA records are in the second layer descriptor and in the case
    of a hidden service requiring client authentication it is impossible
@@ -371,9 +385,9 @@ Table of Contents
    it can decrypt and parse the CAA records from the second layer
    descriptor.
 
-5.  IANA Considerations
+6.  IANA Considerations
 
-5.1.  Validation Methods
+6.1.  Validation Methods
 
    Per this document, one new entry has been added to the "ACME
    Validation Methods" registry defined in [RFC8555] §9.7.8.  This entry
@@ -388,9 +402,9 @@ Table of Contents
 
                             Table 1: New entries
 
-6.  Security Considerations
+7.  Security Considerations
 
-6.1.  Use of "dns" identifier type
+7.1.  Use of "dns" identifier type
 
    The re-use of the "dns" identifier type for a domain not actually in
    the DNS infrastructure raises questions regarding its suitability.
@@ -399,14 +413,14 @@ Table of Contents
    concern in reuse of the "dns" identifier type with regards the mis-
    issuance by CAs that are not aware of ".onion" domains.
 
-6.1.1.  "http-01" Challenge
+7.1.1.  "http-01" Challenge
 
    The CA would follow the procedure set out in [RFC8555] §8.3 which
    specifies that the CA should "Dereference the URL using an HTTP GET
    request".  Given that ".onion" require special handling to
    dereference, this de-referencing will fail, disallowing issuance.
 
-6.1.2.  "tls-alpn-01" Challenge
+7.1.2.  "tls-alpn-01" Challenge
 
    The CA would follow the procedure set out in [RFC8737] §3 which
    specifies that the CA "resolves the domain name being validated and
@@ -414,14 +428,14 @@ Table of Contents
    ".onion" are not resolvable to IP addresses, this de-referencing will
    fail, disallowing issuance.
 
-6.1.3.  "dns-01" Challenge
+7.1.3.  "dns-01" Challenge
 
    The CA would follow the procedure set out in [RFC8555] §8.4 which
    specifies that the CA should "query for TXT records for the
    validation domain name".  Given that ".onion" are not present in the
    DNS infrastructure, this query will fail, disallowing issuance.
 
-6.2.  Key Authorization with "onion-csr-01"
+7.2.  Key Authorization with "onion-csr-01"
 
    The "onion-csr-01" challenge does not make use of the key
    authorization string defined in [RFC8555] §8.1.  This does not weaken
@@ -435,21 +449,21 @@ Table of Contents
    already requires that the request be signed by the account, the key
    authorization is not required.
 
-6.3.  Use of Tor for non ".onion" domains
+7.3.  Use of Tor for non ".onion" domains
 
    An ACME server MUST NOT utilise Tor for the validation of non
    ".onion" domains, due to the risk of possible exit hijacking.
 
-6.4.  Security of CAA records
+7.4.  Security of CAA records
 
    The second layer descriptor is encrypted and MACed in a way that only
    a party with access to the secret key of the hidden service could
    manipulate what is published there.  For more information about this
    process see [tor-rend-spec-v3] § 2.5.3.
 
-7.  References
+8.  References
 
-7.1.  Normative References
+8.1.  Normative References
 
    [BCP14]    Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
@@ -501,7 +515,7 @@ Table of Contents
               <https://cabforum.org/wp-content/uploads/CA-Browser-Forum-
               BR-1.8.6.pdf>.
 
-7.2.  Informative References
+8.2.  Informative References
 
    [onion-services-setup]
               The Tor Project, "Set Up Your Onion Service",
@@ -532,7 +546,7 @@ Appendix A.  Discussion on the use of the "dns" identifier type
 
    This does raise some questions regarding security within existing
    implementations, however the authors believe this is of little
-   concern, as per Section 6.1.
+   concern, as per Section 7.1.
 
 Acknowledgements
 
