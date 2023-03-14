@@ -108,8 +108,7 @@
           <t>The ACME server <bcp14>MUST</bcp14> make its own connection to the hidden service via the Tor network,
             and <bcp14>MUST NOT</bcp14> outsource this, such as by using Tor2Web.</t>
           <t>An additional field is defined to allow the ACME server to advertise the ed25519 public key it will use (as
-            per <xref target="tor-rend-spec-v3"/> INTRO-AUTH) to authenticate itself during the introduction.
-            This allows the hidden service to obtain a certificate, </t>
+            per <xref target="tor-rend-spec-v3"/> INTRO-AUTH) to authenticate itself during the introduction.</t>
           <dl>
             <dt>authKey (optional, object)</dt>
             <dd>The Ed25519 public key encoded as per <xref target="RFC8037"/>.</dd>
@@ -126,8 +125,7 @@
           <t>The ACME server <bcp14>MUST</bcp14> make its own connection to the hidden service via the Tor network,
             and <bcp14>MUST NOT</bcp14> outsource this, such as by using Tor2Web.</t>
           <t>An additional field is defined to allow the ACME server to advertise the ed25519 public key it will use (as
-            per <xref target="tor-rend-spec-v3"/> INTRO-AUTH) to authenticate itself during the introduction.
-            This allows the hidden service to obtain a certificate, </t>
+            per <xref target="tor-rend-spec-v3"/> INTRO-AUTH) to authenticate itself during the introduction. </t>
           <dl>
             <dt>authKey (optional, object)</dt>
             <dd>The Ed25519 public key encoded as per <xref target="RFC8037"/>.</dd>
@@ -163,8 +161,6 @@
         </sourcecode>
         <t>An "authKey" field is defined to allow the ACME server to advertise the ed25519 public key it will use to
           decrypt the second layer descriptor to check CAA records.</t>
-        <t>ACME servers <bcp14>MUST NOT</bcp14> use the same public key with multiple hidden services.
-          ACME servers <bcp14>MAY</bcp14> re-use public keys for re-validation of the same hidden service.</t>
         <t>Clients may prove control over the key associated with the ".onion" service by generating their CSR with the
           following additional attributes and signing it with the private key of the ".onion" domain:</t>
         <ul>
@@ -212,6 +208,18 @@ applicantSigningNonce ATTRIBUTE ::= {
           "invalid" state. Only in the case that an "onion-csr-01" CSR is POSTed to the finalization endpoint that
           subsequently fails validation <bcp14>MUST</bcp14> the order transition to the "invalid" state.</t>
       </section>
+    </section>
+
+    <section>
+      <name>Client authentication to hidden services</name>
+      <t>The above validation method definitions include an "authKey" to allow the CA to retrieve the descriptor of
+        hidden service that has client authentication enabled.</t>
+      <t>ACME servers <bcp14>MUST NOT</bcp14> use the same public key with multiple hidden services.
+        ACME servers <bcp14>MAY</bcp14> re-use public keys for re-validation of the same hidden service.</t>
+      <t>There is no method to communicate to the CA that client authentication is required; instead the ACME server
+        <bcp14>MUST</bcp14> attempt to calculate its CLIENT-ID as per <xref target="tor-rend-spec-v3"/> FIRST-LAYER-CLIENT-BEHAVIOR.
+        If no "auth-client" line in the first layer hidden service descriptor matches the computed client-id then the server
+        <bcp14>MUST</bcp14> assume that the hidden service does not require client authentication and proceed accordingly.</t>
     </section>
 
     <section>
