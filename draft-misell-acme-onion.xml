@@ -234,7 +234,7 @@ applicantSigningNonce ATTRIBUTE ::= {
       </sourcecode>
       <t>The contents of "flag", "tag", and "value" are as per <xref target="RFC8659"/> § 4.1.1. Multiple CAA records may
        be present, as is the case in the DNS. CAA records in a hidden service descriptor are to be treated the same by
-       CAs as if they had been at the DNS for the ".onion" domain.</t>
+       CAs as if they had been in the DNS for the ".onion" domain.</t>
       <t>A hidden service's second layer descriptor using CAA may look something like the following:</t>
       <sourcecode>
 create2-formats 2
@@ -274,7 +274,7 @@ introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3KHCZUZ3C6tX
       <section>
         <name>Preventing mis-issuance by unknown CAs</name>
         <t>As the CAA records are in the second layer descriptor and in the case of a hidden service requiring client
-          authentication it is impossible to read them without the hidden service trusting a CAs public key, a method is
+          authentication it is impossible to read them without the hidden service trusting a CA's public key, a method is
           required to signal that there are CAA records present (but not reveal their contents, which may disclose
           unwanted information about the hidden service operator).</t>
         <t>To this end a new field is added to the first layer hidden service descriptor
