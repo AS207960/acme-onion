@@ -139,7 +139,7 @@
   "authKey": { ... }
 }
         </sourcecode>
-        <t>Clients may prove control over the key associated with the ".onion" service by generating their CSR with the
+        <t>Clients prove control over the key associated with the ".onion" service by generating a CSR with the
           following additional extension attributes and signing it with the private key of the ".onion" domain:</t>
         <ul>
           <li>A caSigningNonce attribute containing the nonce provided in the challenge. This <bcp14>MUST</bcp14>
@@ -149,12 +149,6 @@
         </ul>
         <t>These additional attributes have the following format</t>
         <sourcecode type="asn.1">
-id-pkix  OBJECT IDENTIFIER ::=
-  { iso(1) identified-organization(3) dod(6) internet(1) security(5)
-    mechanisms(5) pkix(7) }
-
-id-pe OBJECT IDENTIFIER ::= { id-pkix 1 }
-
 cabf OBJECT IDENTIFIER ::=
   { joint-iso-itu-t(2) international-organizations(23)
     ca-browser-forum(140) }
@@ -177,14 +171,45 @@ applicantSigningNonce ATTRIBUTE ::= {
   ID                      { cabf-applicantSigningNonce }
 }
         </sourcecode>
-        <t>In a variation to the usual state machine of ACME, a client need not respond to the challenge. The act of
-          POSTing a CSR to the finalization endpoint is in itself a response to the challenge. The challenge and order
-          progress directly to either the "valid" or "invalid" state without passing through "processing" or "ready"
-          (respectively).</t>
-        <t>In the case of a CSR posted to the finalization endpoint that does not include the above extensions
-          the order <bcp14>SHOULD</bcp14> remain in the "pending" state and <bcp14>SHOULD NOT</bcp14> transition to the
-          "invalid" state. Only in the case that an "onion-csr-01" CSR is POSTed to the finalization endpoint that
-          subsequently fails validation <bcp14>MUST</bcp14> the order transition to the "invalid" state.</t>
+        <t>The subject of the CSR need to be meaningful and CAs <bcp14>SHOULD NOT</bcp14> validate its contents.
+          The public key presented in this CSR <bcp14>MUST</bcp14> be the public key corresponding to the ".onion"
+          domain being validated. It <bcp14>MUST NOT</bcp14> be the same public key presented in the CSR to finalize
+          the order.</t>
+        <t>Client respond with the following object to validate the challenge</t>
+        <dl>
+          <dt>csr (required, string)</dt>
+          <dd>
+            The CSR in the base64url-encoded version of the DER format.
+            (Note: Because this field uses base64url, and does not include headers, it is different from PEM.)
+          </dd>
+        </dl>
+        <sourcecode type="http">
+POST example.com/acme/chall/bbc625c5
+Host: example.com
+Content-Type: application/jose+json
+
+{
+  "protected": base64url({
+    "alg": "ES256",
+    "kid": "https://example.com/acme/acct/evOfKhNU60wg",
+    "nonce": "UQI1PoRi5OuXzxuX7V7wL0",
+    "url": "https://example.com/acme/chall/bbc625c5"
+  }),
+  "payload": base64url({
+    "csr": "MIIBPTCBxAIBADBFMQ...FS6aKdZeGsysoCo4H9P"
+  }),
+  "signature": "Q1bURgJoEslbD1c5...3pYdSMLio57mQNN4"
+}
+        </sourcecode>
+        <t>When presented with the CSR the server verifies it in the following manner:</t>
+        <ol>
+          <li>The CSR is a well formatted PKCS#10 request.</li>
+          <li>The public key in the CSR corresponds to the ".onion" domain being validated.</li>
+          <li>The signature over the CSR validates with the ".onion" domain public key.</li>
+          <li>The caSigningNonce attribute is present and its contents matches the nonce provided to the client.</li>
+          <li>The applicantSigningNonce attribute is present and contains at least 64 bits of entropy.</li>
+        </ol>
+        <t>If all of the above are successful then validation succeeds, otherwise it has failed.</t>
       </section>
     </section>
 
@@ -240,9 +265,10 @@ introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3KHCZUZ3C6tX
       <section>
         <name>Relevant Resource Record Set</name>
         <t>In the absence of the possibility of delegation from a ".onion" domain as there is in the DNS there is no
-          need, nor indeed any possibility to search up a the DNS tree for a relevant CAA record set. Instead all
-          subdomains under a ".onion" domain share the same CAA record set. That is all of these share a CAA record
-          set with "a.onion":</t>
+          need, nor indeed any possibility to search up a the DNS tree for a relevant CAA record set. Similarly, it is
+          also impossible to check CAA records on the  "onion" TLD, so implementors must not look here either.
+          Instead all subdomains under a ".onion" domain share the same CAA record set. That is all of these share a
+          CAA record set with "a.onion":</t>
         <ul>
           <li>b.a.onion</li>
           <li>c.a.onion</li>
@@ -319,21 +345,21 @@ introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3KHCZUZ3C6tX
         <section>
           <name>"http-01" Challenge</name>
           <t>The CA would follow the procedure set out in <xref target="RFC8555"/> §8.3 which specifies that the CA
-            should "Dereference the URL using an HTTP GET request". Given that ".onion" require special handling to
-            dereference, this de-referencing will fail, disallowing issuance.</t>
+            should "Dereference the URL using an HTTP GET request". Given that ".onion" domains require special handling
+            to dereference, this de-referencing will fail, disallowing issuance.</t>
         </section>
         <section>
           <name>"tls-alpn-01" Challenge</name>
           <t>The CA would follow the procedure set out in <xref target="RFC8737"/> §3 which specifies that the CA
             "resolves the domain name being validated and chooses one of the IP addresses returned for validation".
-            Given that ".onion" are not resolvable to IP addresses, this de-referencing will fail, disallowing
+            Given that ".onion" domains are not resolvable to IP addresses, this de-referencing will fail, disallowing
             issuance.</t>
         </section>
         <section>
           <name>"dns-01" Challenge</name>
           <t>The CA would follow the procedure set out in <xref target="RFC8555"/> §8.4 which specifies that the CA
             should "query for TXT records for the validation domain name".
-            Given that ".onion" are not present in the DNS infrastructure, this query will fail, disallowing
+            Given that ".onion" domains are not present in the DNS infrastructure, this query will fail, disallowing
             issuance.</t>
         </section>
       </section>
@@ -341,10 +367,10 @@ introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3KHCZUZ3C6tX
         <name>Key Authorization with "onion-csr-01"</name>
         <t>The "onion-csr-01" challenge does not make use of the key authorization string defined in
           <xref target="RFC8555"/> §8.1. This does not weaken the integrity of authorizations.</t>
-        <t>The key authorization exists to ensure that an attacker observing the validation channel can observe the
-          correct validation response, but cannot compromise the integrity of authorizations as the response only be
-          used with the account key for which it was generated. As the validation channel for this challenge is
-          ACME itself, and ACME already requires that the request be signed by the account, the key authorization is
+        <t>The key authorization exists to ensure that whilst an attacker observing the validation channel may observe
+          the correct validation response, they cannot cannot compromise the integrity of authorizations as the response
+          can only be used with the account key for which it was generated. As the validation channel for this challenge
+          is ACME itself, and ACME already requires that the request be signed by the account, the key authorization is
           not required.</t>
       </section>
       <section>
