@@ -62,10 +62,10 @@ Specification:
     [At most once]
 
 Security Considerations:
-  The second layer descriptor is encrypted and MACed in a way that only a party
-  with access to the secret key of the hidden service could manipulate what is
-  published there. Therefore, Tor CAA records have at least the same security as
-  those in the DNS secured by DNSSEC.
+  The second layer descriptor is signed, encrypted and MACed in a way that only
+  a party with access to the secret key of the hidden service could manipulate
+  what is published there. Therefore, Tor CAA records have at least the same
+  security as those in the DNS secured by DNSSEC.
 
   The "caa-critical" flag is visible to anyone with knowledge of the hidden
   service's public key, however it reveals no information that could be used to
