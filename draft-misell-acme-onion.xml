@@ -244,6 +244,14 @@ Content-Type: application/jose+json
     </section>
 
     <section>
+      <name>ACME over hidden services</name>
+      <t>A CA offering certificates to ".onion" Special-Use Domain Names <bcp14>SHOULD</bcp14> strongly consider
+        making their ACME server available as a Tor hidden services. ACME clients <bcp14>SHOULD</bcp14> also support
+        connecting to ACME servers over Tor, regardless of their support of "onion-csr-01", as their existing "http-01"
+        and "tls-alpn-01" implementations could be used to obtain certificates for ".onion" Special-Use Domain Names.</t>
+    </section>
+
+    <section>
       <name>Certification Authority Authorization (CAA)</name>
       <t>".onion" Special-Use Domain Name are not part of the DNS, and as such a variation on CAA <xref target="RFC8659"/> is required
         to allow restrictions to be placed on certificate issuance.</t>
@@ -396,6 +404,15 @@ introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3KHCZUZ3C6tX
         <t>The ACME server <bcp14>MUST</bcp14> make its own connection to the hidden service via the Tor network,
           and <bcp14>MUST NOT</bcp14> outsource this, such as by using Tor2Web.</t>
       </section>
+      <section>
+        <name>Anonymity of the ACME client</name>
+        <t>ACME clients requesting certificates for ".onion" Special-Use Domain Names may expose the existence of a
+        hidden service on the host to unintended parties - even when features such as ECH
+          <xref target="I-D.ietf-tls-esni"/> are utilised, as the IP addresses of ACME servers are generally
+          well-known, static, and not used for any other purpose.</t>
+        <t>ACME clients <bcp14>SHOULD</bcp14> connect to ACME servers over the Tor network to alleviate this, preferring
+        a hidden service endpoint if the CA provides such a service.</t>
+      </section>
     </section>
   </middle>
 
@@ -455,6 +472,8 @@ introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3KHCZUZ3C6tX
             </author>
           </front>
         </reference>
+
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-tls-esni.xml"/>
       </references>
     </references>
 

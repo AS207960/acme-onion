@@ -1,8 +1,9 @@
-Filename: xxx-rend-caa.txt
+Filename: 343-rend-caa.txt
 Title: CAA Extensions for the Tor Rendezvous Specification
 Author: Q Misell <q@as207960.net>
 Created: 2023-04-25
 Status: Open
+Ticket: https://gitlab.torproject.org/tpo/core/tor/-/merge_requests/716
 
 Overview:
   The document defines extensions to the Tor Rendezvous Specification Hidden
@@ -21,6 +22,9 @@ Motivation:
 
   As Tor hidden service domains are not in the DNS another way to provide the
   same security benefits as CAA does in the DNS needed to be devised.
+
+  It is important to note that a hidden service is not required to publish a CAA
+  record to obtain a certificate, as is the case in the DNS.
 
   More information about this project in general can be found at
   https://acmeforonions.org.
