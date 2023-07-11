@@ -1,11 +1,11 @@
-# Automated Certificate Management Environment (ACME) Extensions for ".onion" Domain Names
+# Automated Certificate Management Environment (ACME) Extensions for ".onion" Special-Use Domain Names
 
-This is the working area for the individual Internet-Draft, "Automated Certificate Management Environment (ACME) Extensions for ".onion" Domain Names".
+This is the working area for the ACME working group Internet-Draft, "Automated Certificate Management Environment (ACME) Extensions for ".onion" Special-Use Domain Names".
 
-* [Editor's Copy](https://AS207960.github.io/acme-onion/#go.draft-misell-acme-onion.html)
-* [Datatracker Page](https://datatracker.ietf.org/doc/draft-misell-acme-onion)
-* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-misell-acme-onion)
-* [Compare Editor's Copy to Individual Draft](https://AS207960.github.io/acme-onion/#go.draft-misell-acme-onion.diff)
+* [Editor's Copy](https://AS207960.github.io/acme-onion/#go.draft-ietf-acme-onion.html)
+* [Datatracker Page](https://datatracker.ietf.org/doc/draft-ietf-acme-onion)
+* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-ietf-acme-onion)
+* [Compare Editor's Copy to Individual Draft](https://AS207960.github.io/acme-onion/#go.draft-ietf-acme-onion.diff)
 
 ## Contributing
 
