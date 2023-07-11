@@ -8,11 +8,11 @@
 ]>
 
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
-     ipr="trust200902" submissionType="IETF" category="std" version="3" docName="draft-misell-acme-onion-latest">
+     ipr="trust200902" submissionType="IETF" category="std" version="3" docName="draft-ietf-acme-onion-latest">
   <front>
     <title abbrev="ACME for .onion">Automated Certificate Management Environment (ACME) Extensions for ".onion"
-      Special-Use Domain Name</title>
-    <seriesInfo name="Internet-Draft" status="standard" value="draft-misell-acme-onion-latest"/>
+      Special-Use Domain Names</title>
+    <seriesInfo name="Internet-Draft" status="standard" value="draft-ietf-acme-onion-latest"/>
     <author fullname="Q Misell" initials="Q" role="editor" surname="Misell">
       <organization abbrev="AS207960">AS207960 Cyfyngedig</organization>
       <address>
@@ -28,7 +28,7 @@
       </address>
     </author>
     <area>sec</area>
-    <workgroup>Internet Engineering Task Force</workgroup>
+    <workgroup>Automated Certificate Management Environment</workgroup>
 
     <abstract>
       <t>The document defines extensions to the Automated Certificate Management Environment (ACME) to allow for the
