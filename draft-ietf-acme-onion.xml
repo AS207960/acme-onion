@@ -22,8 +22,8 @@
           <code>CF23 9EU</code>
           <country>United Kingdom</country>
         </postal>
-        <email>q@magicalcodewit.ch</email>
         <email>q@as207970.net</email>
+        <email>q@magicalcodewit.ch</email>
         <uri>https://magicalcodewit.ch</uri>
       </address>
     </author>
@@ -236,11 +236,11 @@ Content-Type: application/jose+json
         <bcp14>MUST</bcp14> attempt to calculate its CLIENT-ID as per <xref target="tor-rend-spec-v3"/> FIRST-LAYER-CLIENT-BEHAVIOR.
         If no "auth-client" line in the first layer hidden service descriptor matches the computed client-id then the server
         <bcp14>MUST</bcp14> assume that the hidden service does not require client authentication and proceed accordingly.</t>
-      <t>In the case the Ed25519 is novel to the client it will have to resign and republish its hidden service
+      <t>In the case the Ed25519 public key is novel to the client it will have to resign and republish its hidden service
         descriptor. It <bcp14>SHOULD</bcp14> wait some (indeterminate) amount of time for the new descriptor to
-        propagate the Tor hidden service directory servers, before. This should take no more than a few minutes. CAs
-        <bcp14>MUST NOT</bcp14> expire challenges before a reasonable time to allow publication of the new descriptor
-        (this document suggests at least 30 minutes).</t>
+        propagate the Tor hidden service directory servers, before proceeding with responding to the challenge.
+        This should take no more than a few minutes. CAs <bcp14>MUST NOT</bcp14> expire challenges before a reasonable
+        time to allow publication of the new descriptor (this document suggests at least 30 minutes).</t>
     </section>
 
     <section>
@@ -268,9 +268,8 @@ Content-Type: application/jose+json
       <sourcecode>
 create2-formats 2
 single-onion-service
-caa 0 issue "example.com"
+caa 128 issue "test.acmeforonions.org;validationmethods=onion-csr-01"
 caa 0 iodef "mailto:security@example.com"
-caa 128 validationmethods "onion-csr-01"
 introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3KHCZUZ3C6tXDeRfM9SyNY0DlgbF8q+QSaGKCs=
 ...
       </sourcecode>
