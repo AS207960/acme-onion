@@ -1,6 +1,7 @@
 # Automated Certificate Management Environment (ACME) Extensions for ".onion" Special-Use Domain Names
 
-This is the working area for the ACME working group Internet-Draft, "Automated Certificate Management Environment (ACME) Extensions for ".onion" Special-Use Domain Names".
+This is the working area for the [ACME working group](https://datatracker.ietf.org/wg/acme/about/)
+Internet-Draft, "Automated Certificate Management Environment (ACME) Extensions for ".onion" Special-Use Domain Names".
 
 * [Editor's Copy](https://AS207960.github.io/acme-onion/#go.draft-ietf-acme-onion.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-ietf-acme-onion)
