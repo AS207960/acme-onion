@@ -175,7 +175,7 @@ applicantSigningNonce ATTRIBUTE ::= {
   ID                      { cabf-applicantSigningNonce }
 }
         </sourcecode>
-        <t>The subject of the CSR need to be meaningful and CAs <bcp14>SHOULD NOT</bcp14> validate its contents.
+        <t>The subject of the CSR need not be meaningful and CAs <bcp14>SHOULD NOT</bcp14> validate its contents.
           The public key presented in this CSR <bcp14>MUST</bcp14> be the public key corresponding to the ".onion"
           Special-Use Domain Name being validated. It <bcp14>MUST NOT</bcp14> be the same public key presented in the
           CSR to finalize the order.</t>
@@ -316,6 +316,83 @@ introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3KHCZUZ3C6tX
         </sourcecode>
         <t>If a CA encounters this flag it <bcp14>MUST NOT</bcp14> proceed with issuance until it can decrypt and
           parse the CAA records from the second layer descriptor.</t>
+      </section>
+      <section>
+        <name>Alternative in-band presentation of CAA</name>
+        <t>A CA may not be willing to operate the infrastructure required to fetch, decode, and verify Tor hidden service
+          descriptors in order to check CAA records. Tor directory servers are inherently untrusted entities, and as such
+          there is no difference in the security model of accepting CAA records directly from the ACME client or fetching
+          them over Tor. To this end a method to signal CAA policies in-band of ACME is defined.</t>
+        <t>If a hidden service does use this method to provide CAA records to a CA it <bcp14>SHOULD</bcp14> still publish
+          CAA records if its CAA record set includes "iodef", "contactemail", or "contactphone" so that this information
+          is still publicly accessible. A hidden service operator <bcp14>MAY</bcp14> also not wish to publish a CAA
+          record set in its service descriptor to avoid revealing information about the service operator.</t>
+        <t>A new field is defined in the ACME finalize endpoint to contain the hidden service's CAA record set
+          If a CA receives a validly signed CAA record set in the finalize request it need not check the CAA set in
+          the hidden service descriptor and can proceed with issuance on the basis of the client provided CAA record set
+          only. A CA, however, is not required to do anything with the client provided record set, and is free to always
+          fetch the record set from the service descriptor.</t>
+        <dl>
+          <dt>onionCAA (optional, object)</dt>
+          <dd>
+            The CAA record set defined below.
+          </dd>
+        </dl>
+        <t>The contents of the "onionCAA" object is:</t>
+        <dl>
+          <dt>caa (required, string or null)</dt>
+          <dd>
+            The CAA record set as a string, encoded in the same way as if was included in the hidden service descriptor.
+            If the hidden service does not have a CAA record set then this <bcp14>MUST</bcp14> be null.
+          </dd>
+          <dt>expiry (required, integer)</dt>
+          <dd>
+            The Unix timestamp at which this CAA record set will expire. This <bcp14>SHOULD NOT</bcp14> be more than
+            8 hours in the future. CAs <bcp14>MUST</bcp14> process this as at least a 64-bit integer to ensure
+            functionality beyond 2038.
+          </dd>
+          <dt>signature (required, string)</dt>
+          <dd>
+            The Ed25519 signature of the CAA record set using the private key corresponding to the ".onion"
+            Special-Use Domain Name, encoded using base64url. The signature is defined below.
+          </dd>
+        </dl>
+        <t>The data that the signature is calculated over is the concatenation of the following:</t>
+        <sourcecode>"onion-caa|" || expiry || "|" || caa</sourcecode>
+        <t>Where "|" is the ASCII character 0x7C, and expiry is the expiry field as a decimal string with no
+          leading zeros.</t>
+        <section>
+          <name>Example in-band CAA</name>
+          <t>Given the following example CAA record set for 5anebu2glyc235wbbop3m2ukzlaptpkq333vdtdvcjpigyb7x2i2m2qd.onion:</t>
+          <sourcecode>
+caa 128 issue "test.acmeforonions.org; validationmethods=onion-csr-01"
+caa 0 iodef "mailto:example@example.com"
+          </sourcecode>
+          <t>The following would be submitted to the CA's finalize endpoint</t>
+          <sourcecode type="http">
+POST /acme/order/TOlocE8rfgo/finalize
+Host: example.com
+Content-Type: application/jose+json
+
+{
+  "protected": base64url({
+    "alg": "ES256",
+    "kid": "https://example.com/acme/acct/evOfKhNU60wg",
+    "nonce": "MSF2j2nawWHPxxkE3ZJtKQ",
+    "url": "https://example.com/acme/order/TOlocE8rfgo/finalize"
+  }),
+  "payload": base64url({
+    "csr": "MIIBPTCBxAIBADBFMQ...FS6aKdZeGsysoCo4H9P",
+    "onionCAA": {
+      "caa": "caa 128 issue \"test.acmeforonions.org; validationmethods=onion-csr-01\"\ncaa 0 iodef \"mailto:example@example.com\"",
+      "expiry": 1697210719,
+      "signature": "u_iP6JZ4JZBrzQUKH6lSrWejjRfeQmkTuehc0_FaaTNPAV0RVxpUz9r44DRdy6kgy0ofnx18KIhMrP7N1wpxAA=="
+    }
+  }),
+  "signature": "uOrUfIIk5RyQ...nw62Ay1cl6AB"
+}
+          </sourcecode>
+        </section>
       </section>
     </section>
 
