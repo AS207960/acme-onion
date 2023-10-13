@@ -320,9 +320,7 @@ introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3KHCZUZ3C6tX
       <section>
         <name>Alternative in-band presentation of CAA</name>
         <t>A CA may not be willing to operate the infrastructure required to fetch, decode, and verify Tor hidden service
-          descriptors in order to check CAA records. Tor directory servers are inherently untrusted entities, and as such
-          there is no difference in the security model of accepting CAA records directly from the ACME client or fetching
-          them over Tor. To this end a method to signal CAA policies in-band of ACME is defined.</t>
+          descriptors in order to check CAA records. To this end a method to signal CAA policies in-band of ACME is defined.</t>
         <t>If a hidden service does use this method to provide CAA records to a CA it <bcp14>SHOULD</bcp14> still publish
           CAA records if its CAA record set includes "iodef", "contactemail", or "contactphone" so that this information
           is still publicly accessible. A hidden service operator <bcp14>MAY</bcp14> also not wish to publish a CAA
@@ -552,6 +550,12 @@ Content-Type: application/jose+json
         <t>The second layer descriptor is signed, encrypted and MACed in a way that only a party with access to the
           secret key of the hidden service could manipulate what is published there. For more information about this
           process see <xref target="tor-rend-spec-v3"/> § 2.5.3.</t>
+      </section>
+      <section>
+        <name>In-band CAA</name>
+        <t>Tor directory servers are inherently untrusted entities, and as such there is no difference in the security
+          model for accepting CAA records directly from the ACME client or fetching them over Tor. CAA records are still
+          verified against the same hidden service key.</t>
       </section>
       <section>
         <name>Access of the Tor network</name>
