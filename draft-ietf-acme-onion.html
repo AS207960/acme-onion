@@ -10,23 +10,23 @@
        The document defines extensions to the Automated Certificate Management Environment (ACME) to allow for the
         automatic issuance of certificates to Tor hidden services (".onion" Special-Use Domain Names). 
     ' name="description">
-<meta content="xml2rfc 3.17.4" name="generator">
+<meta content="xml2rfc 3.18.1" name="generator">
 <meta content="draft-ietf-acme-onion-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.17.4
-    Python 3.11.4
+  xml2rfc 3.18.1
+    Python 3.11.5
     ConfigArgParse 1.5.3
     google-i18n-address 3.1.0
     intervaltree 3.1.0
     Jinja2 3.1.2
-    lxml 4.9.2
-    platformdirs 3.8.0
+    lxml 4.9.3
+    platformdirs 3.11.0
     pycountry 22.3.5
     PyYAML 6.0
     requests 2.31.0
     setuptools 67.7.2
     six 1.16.0
-    wcwidth 0.2.6
+    wcwidth 0.2.8
 -->
 <link href="draft-ietf-acme-onion.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1035,11 +1035,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">ACME for .onion</td>
-<td class="right">July 2023</td>
+<td class="right">October 2023</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Misell</td>
-<td class="center">Expires 12 January 2024</td>
+<td class="center">Expires 15 April 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1052,12 +1052,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-acme-onion-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-07-11" class="published">11 July 2023</time>
+<time datetime="2023-10-13" class="published">13 October 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-01-12">12 January 2024</time></dd>
+<dd class="expires"><time datetime="2024-04-15">15 April 2024</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1103,7 +1103,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 12 January 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 15 April 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1183,6 +1183,17 @@ svg :is([fill="white"], [fill^="#fff"]) {
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.3">
                 <p id="section-toc.1-1.6.2.3.1"><a href="#section-6.3" class="auto internal xref">6.3</a>.  <a href="#name-preventing-mis-issuance-by-" class="internal xref">Preventing mis-issuance by unknown CAs</a></p>
 </li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.4">
+                <p id="section-toc.1-1.6.2.4.1"><a href="#section-6.4" class="auto internal xref">6.4</a>.  <a href="#name-alternative-in-band-present" class="internal xref">Alternative in-band presentation of CAA</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.4.2.1">
+                    <p id="section-toc.1-1.6.2.4.2.1.1"><a href="#section-6.4.1" class="auto internal xref">6.4.1</a>.  <a href="#name-cas-requiring-in-band-caa" class="internal xref">CAs requiring in-band CAA</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.4.2.2">
+                    <p id="section-toc.1-1.6.2.4.2.2.1"><a href="#section-6.4.2" class="auto internal xref">6.4.2</a>.  <a href="#name-example-in-band-caa" class="internal xref">Example in-band CAA</a></p>
+</li>
+                </ul>
+</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
@@ -1190,6 +1201,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
                 <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-validation-methods" class="internal xref">Validation Methods</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-error-types" class="internal xref">Error Types</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
+                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="auto internal xref">7.3</a>.  <a href="#name-directory-metadata-fields" class="internal xref">Directory Metadata Fields</a></p>
 </li>
             </ul>
 </li>
@@ -1412,7 +1429,7 @@ applicantSigningNonce ATTRIBUTE ::= {
 }
 </pre><a href="#section-3.2-8" class="pilcrow">¶</a>
 </div>
-<p id="section-3.2-9">The subject of the CSR need to be meaningful and CAs <span class="bcp14">SHOULD NOT</span> validate its contents.
+<p id="section-3.2-9">The subject of the CSR need not be meaningful and CAs <span class="bcp14">SHOULD NOT</span> validate its contents.
           The public key presented in this CSR <span class="bcp14">MUST</span> be the public key corresponding to the ".onion"
           Special-Use Domain Name being validated. It <span class="bcp14">MUST NOT</span> be the same public key presented in the
           CSR to finalize the order.<a href="#section-3.2-9" class="pilcrow">¶</a></p>
@@ -1585,6 +1602,135 @@ introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3KHCZUZ3C6tX
 <p id="section-6.3-4">If a CA encounters this flag it <span class="bcp14">MUST NOT</span> proceed with issuance until it can decrypt and
           parse the CAA records from the second layer descriptor.<a href="#section-6.3-4" class="pilcrow">¶</a></p>
 </section>
+<section id="section-6.4">
+        <h3 id="name-alternative-in-band-present">
+<a href="#section-6.4" class="section-number selfRef">6.4. </a><a href="#name-alternative-in-band-present" class="section-name selfRef">Alternative in-band presentation of CAA</a>
+        </h3>
+<p id="section-6.4-1">A CA may not be willing to operate the infrastructure required to fetch, decode, and verify Tor hidden service
+          descriptors in order to check CAA records. Tor directory servers are inherently untrusted entities, and as such
+          there is no difference in the security model of accepting CAA records directly from the ACME client or fetching
+          them over Tor. To this end a method to signal CAA policies in-band of ACME is defined.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
+<p id="section-6.4-2">If a hidden service does use this method to provide CAA records to a CA it <span class="bcp14">SHOULD</span> still publish
+          CAA records if its CAA record set includes "iodef", "contactemail", or "contactphone" so that this information
+          is still publicly accessible. A hidden service operator <span class="bcp14">MAY</span> also not wish to publish a CAA
+          record set in its service descriptor to avoid revealing information about the service operator.<a href="#section-6.4-2" class="pilcrow">¶</a></p>
+<p id="section-6.4-3">A new field is defined in the ACME finalize endpoint to contain the hidden service's CAA record set
+          If a CA receives a validly signed CAA record set in the finalize request it need not check the CAA set in
+          the hidden service descriptor and can proceed with issuance on the basis of the client provided CAA record set
+          only. A CA, however, is not required to do anything with the client provided record set, and is free to always
+          fetch the record set from the service descriptor.<a href="#section-6.4-3" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-6.4-4">
+          <dt id="section-6.4-4.1">onionCAA (optional, object)</dt>
+          <dd style="margin-left: 1.5em" id="section-6.4-4.2">
+            The CAA record set defined below.<a href="#section-6.4-4.2" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+</dl>
+<p id="section-6.4-5">The contents of the "onionCAA" object is:<a href="#section-6.4-5" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-6.4-6">
+          <dt id="section-6.4-6.1">caa (required, string or null)</dt>
+          <dd style="margin-left: 1.5em" id="section-6.4-6.2">
+            The CAA record set as a string, encoded in the same way as if was included in the hidden service descriptor.
+            If the hidden service does not have a CAA record set then this <span class="bcp14">MUST</span> be null.<a href="#section-6.4-6.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.4-6.3">expiry (required, integer)</dt>
+          <dd style="margin-left: 1.5em" id="section-6.4-6.4">
+            The Unix timestamp at which this CAA record set will expire. This <span class="bcp14">SHOULD NOT</span> be more than
+            8 hours in the future. CAs <span class="bcp14">MUST</span> process this as at least a 64-bit integer to ensure
+            functionality beyond 2038.<a href="#section-6.4-6.4" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.4-6.5">signature (required, string)</dt>
+          <dd style="margin-left: 1.5em" id="section-6.4-6.6">
+            The Ed25519 signature of the CAA record set using the private key corresponding to the ".onion"
+            Special-Use Domain Name, encoded using base64url. The signature is defined below.<a href="#section-6.4-6.6" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+</dl>
+<p id="section-6.4-7">The data that the signature is calculated over is the concatenation of the following:<a href="#section-6.4-7" class="pilcrow">¶</a></p>
+<div class="sourcecode" id="section-6.4-8">
+<pre>"onion-caa|" || expiry || "|" || caa</pre><a href="#section-6.4-8" class="pilcrow">¶</a>
+</div>
+<p id="section-6.4-9">Where "|" is the ASCII character 0x7C, and expiry is the expiry field as a decimal string with no
+          leading zeros.<a href="#section-6.4-9" class="pilcrow">¶</a></p>
+<section id="section-6.4.1">
+          <h4 id="name-cas-requiring-in-band-caa">
+<a href="#section-6.4.1" class="section-number selfRef">6.4.1. </a><a href="#name-cas-requiring-in-band-caa" class="section-name selfRef">CAs requiring in-band CAA</a>
+          </h4>
+<p id="section-6.4.1-1">If a CA does not support fetching a service's CAA record set from its service descriptor it, and the
+            ACME client does not provide an "onionCAA" object in its finalize request the CA <span class="bcp14">MUST</span> respond
+            with an "onionCAARequired" error to indicate this.<a href="#section-6.4.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.4.1-2">Additionally, a new field is defined in the directory "meta" object to signal this.<a href="#section-6.4.1-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-6.4.1-3">
+            <dt id="section-6.4.1-3.1">onionCAARequired (optional, boolean)</dt>
+            <dd style="margin-left: 1.5em" id="section-6.4.1-3.2">
+              If true, the CA requires the client to provide the CAA record set in the finalize request.
+              If false or absent the CA does not require the client to provide the CAA record set is this manner.<a href="#section-6.4.1-3.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<p id="section-6.4.1-4">A directory of such a CA may look like<a href="#section-6.4.1-4" class="pilcrow">¶</a></p>
+<div class="lang-http sourcecode" id="section-6.4.1-5">
+<pre>
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "newNonce": "https://example.com/acme/new-nonce",
+  "newAccount": "https://example.com/acme/new-account",
+  "newOrder": "https://example.com/acme/new-order",
+  "revokeCert": "https://example.com/acme/revoke-cert",
+  "keyChange": "https://example.com/acme/key-change",
+  "meta": {
+    "termsOfService": "https://example.com/acme/terms/2023-10-13",
+    "website": "https://acmeforonions.org/",
+    "caaIdentities": ["test.acmeforonions.org"],
+    "onionCAARequired": true
+  }
+}
+</pre><a href="#section-6.4.1-5" class="pilcrow">¶</a>
+</div>
+</section>
+<section id="section-6.4.2">
+          <h4 id="name-example-in-band-caa">
+<a href="#section-6.4.2" class="section-number selfRef">6.4.2. </a><a href="#name-example-in-band-caa" class="section-name selfRef">Example in-band CAA</a>
+          </h4>
+<p id="section-6.4.2-1">Given the following example CAA record set for 5anebu2glyc235wbbop3m2ukzlaptpkq333vdtdvcjpigyb7x2i2m2qd.onion:<a href="#section-6.4.2-1" class="pilcrow">¶</a></p>
+<div class="sourcecode" id="section-6.4.2-2">
+<pre>
+caa 128 issue "test.acmeforonions.org; validationmethods=onion-csr-01"
+caa 0 iodef "mailto:example@example.com"
+</pre><a href="#section-6.4.2-2" class="pilcrow">¶</a>
+</div>
+<p id="section-6.4.2-3">The following would be submitted to the CA's finalize endpoint<a href="#section-6.4.2-3" class="pilcrow">¶</a></p>
+<div class="lang-http sourcecode" id="section-6.4.2-4">
+<pre>
+POST /acme/order/TOlocE8rfgo/finalize
+Host: example.com
+Content-Type: application/jose+json
+
+{
+  "protected": base64url({
+    "alg": "ES256",
+    "kid": "https://example.com/acme/acct/evOfKhNU60wg",
+    "nonce": "MSF2j2nawWHPxxkE3ZJtKQ",
+    "url": "https://example.com/acme/order/TOlocE8rfgo/finalize"
+  }),
+  "payload": base64url({
+    "csr": "MIIBPTCBxAIBADBFMQ...FS6aKdZeGsysoCo4H9P",
+    "onionCAA": {
+      "caa": "caa 128 issue \"test.acmeforonions.org; validationmethods=onion-csr-01\"\ncaa 0 iodef \"mailto:example@example.com\"",
+      "expiry": 1697210719,
+      "signature": "u_iP6JZ4JZBrzQUKH6lSrWejjRfeQmkTuehc0_FaaTNPAV0RVxpUz9r44DRdy6kgy0ofnx18KIhMrP7N1wpxAA=="
+    }
+  }),
+  "signature": "uOrUfIIk5RyQ...nw62Ay1cl6AB"
+}
+</pre><a href="#section-6.4.2-4" class="pilcrow">¶</a>
+</div>
+</section>
+</section>
 </section>
 <div id="IANA">
 <section id="section-7">
@@ -1615,6 +1761,61 @@ introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3KHCZUZ3C6tX
               <td class="text-left" rowspan="1" colspan="1">onion-csr-01</td>
               <td class="text-left" rowspan="1" colspan="1">dns</td>
               <td class="text-left" rowspan="1" colspan="1">Y</td>
+              <td class="text-left" rowspan="1" colspan="1">This document</td>
+            </tr>
+          </tbody>
+        </table>
+</section>
+<section id="section-7.2">
+        <h3 id="name-error-types">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-error-types" class="section-name selfRef">Error Types</a>
+        </h3>
+<p id="section-7.2-1">Per this document, one new entry has been added to the "ACME Error Types" registry defined in
+          <span>[<a href="#RFC8555" class="cite xref">RFC8555</a>]</span> §9.7.8. This entry is defined below:<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<span id="name-new-entries-2"></span><table class="center" id="table-2">
+          <caption>
+<a href="#table-2" class="selfRef">Table 2</a>:
+<a href="#name-new-entries-2" class="selfRef">New entries</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Type</th>
+              <th class="text-left" rowspan="1" colspan="1">Description</th>
+              <th class="text-left" rowspan="1" colspan="1">Reference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">onionCAARequired</td>
+              <td class="text-left" rowspan="1" colspan="1">The CA only supports checking CAA for hidden services in-band, but the client has not provided an
+                in-band CAA</td>
+              <td class="text-left" rowspan="1" colspan="1">This document</td>
+            </tr>
+          </tbody>
+        </table>
+</section>
+<section id="section-7.3">
+        <h3 id="name-directory-metadata-fields">
+<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-directory-metadata-fields" class="section-name selfRef">Directory Metadata Fields</a>
+        </h3>
+<p id="section-7.3-1">Per this document, one new entry has been added to the "ACME Directory Metadata Fields" registry defined in
+          <span>[<a href="#RFC8555" class="cite xref">RFC8555</a>]</span> §9.7.8. This entry is defined below:<a href="#section-7.3-1" class="pilcrow">¶</a></p>
+<span id="name-new-entries-3"></span><table class="center" id="table-3">
+          <caption>
+<a href="#table-3" class="selfRef">Table 3</a>:
+<a href="#name-new-entries-3" class="selfRef">New entries</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Field name</th>
+              <th class="text-left" rowspan="1" colspan="1">Field type</th>
+              <th class="text-left" rowspan="1" colspan="1">Reference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">onionCAARequired</td>
+              <td class="text-left" rowspan="1" colspan="1">boolean</td>
               <td class="text-left" rowspan="1" colspan="1">This document</td>
             </tr>
           </tbody>
@@ -1779,7 +1980,7 @@ introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3KHCZUZ3C6tX
 <dd class="break"></dd>
 <dt id="I-D.ietf-tls-esni">[I-D.ietf-tls-esni]</dt>
       <dd>
-<span class="refAuthor">Rescorla, E.</span>, <span class="refAuthor">Oku, K.</span>, <span class="refAuthor">Sullivan, N.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"TLS Encrypted Client Hello"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-tls-esni-16</span>, <time datetime="2023-04-06" class="refDate">6 April 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-tls-esni-16">https://datatracker.ietf.org/doc/html/draft-ietf-tls-esni-16</a>&gt;</span>. </dd>
+<span class="refAuthor">Rescorla, E.</span>, <span class="refAuthor">Oku, K.</span>, <span class="refAuthor">Sullivan, N.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"TLS Encrypted Client Hello"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-tls-esni-17</span>, <time datetime="2023-10-09" class="refDate">9 October 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-tls-esni-17">https://datatracker.ietf.org/doc/html/draft-ietf-tls-esni-17</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>

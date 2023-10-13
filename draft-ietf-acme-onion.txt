@@ -4,8 +4,8 @@
 
 Automated Certificate Management Environment              Q. Misell, Ed.
 Internet-Draft                                                  AS207960
-Intended status: Standards Track                            11 July 2023
-Expires: 12 January 2024
+Intended status: Standards Track                         13 October 2023
+Expires: 15 April 2024
 
 
    Automated Certificate Management Environment (ACME) Extensions for
@@ -44,7 +44,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 January 2024.
+   This Internet-Draft will expire on 15 April 2024.
 
 Copyright Notice
 
@@ -77,8 +77,13 @@ Table of Contents
      6.1.  Relevant Resource Record Set
      6.2.  When to check CAA
      6.3.  Preventing mis-issuance by unknown CAs
+     6.4.  Alternative in-band presentation of CAA
+       6.4.1.  CAs requiring in-band CAA
+       6.4.2.  Example in-band CAA
    7.  IANA Considerations
      7.1.  Validation Methods
+     7.2.  Error Types
+     7.3.  Directory Metadata Fields
    8.  Security Considerations
      8.1.  Use of "dns" identifier type
        8.1.1.  "http-01" Challenge
@@ -240,7 +245,7 @@ Table of Contents
      ID                      { cabf-applicantSigningNonce }
    }
 
-   The subject of the CSR need to be meaningful and CAs SHOULD NOT
+   The subject of the CSR need not be meaningful and CAs SHOULD NOT
    validate its contents.  The public key presented in this CSR MUST be
    the public key corresponding to the ".onion" Special-Use Domain Name
    being validated.  It MUST NOT be the same public key presented in the
@@ -248,9 +253,10 @@ Table of Contents
 
    Client respond with the following object to validate the challenge
 
-   csr (required, string)  The CSR in the base64url-encoded version of
-      the DER format.  (Note: Because this field uses base64url, and
-      does not include headers, it is different from PEM.)
+   csr (required, string)
+      The CSR in the base64url-encoded version of the DER format.
+      (Note: Because this field uses base64url, and does not include
+      headers, it is different from PEM.)
 
    POST example.com/acme/chall/bbc625c5
    Host: example.com
@@ -421,6 +427,125 @@ Table of Contents
    it can decrypt and parse the CAA records from the second layer
    descriptor.
 
+6.4.  Alternative in-band presentation of CAA
+
+   A CA may not be willing to operate the infrastructure required to
+   fetch, decode, and verify Tor hidden service descriptors in order to
+   check CAA records.  Tor directory servers are inherently untrusted
+   entities, and as such there is no difference in the security model of
+   accepting CAA records directly from the ACME client or fetching them
+   over Tor. To this end a method to signal CAA policies in-band of ACME
+   is defined.
+
+   If a hidden service does use this method to provide CAA records to a
+   CA it SHOULD still publish CAA records if its CAA record set includes
+   "iodef", "contactemail", or "contactphone" so that this information
+   is still publicly accessible.  A hidden service operator MAY also not
+   wish to publish a CAA record set in its service descriptor to avoid
+   revealing information about the service operator.
+
+   A new field is defined in the ACME finalize endpoint to contain the
+   hidden service's CAA record set If a CA receives a validly signed CAA
+   record set in the finalize request it need not check the CAA set in
+   the hidden service descriptor and can proceed with issuance on the
+   basis of the client provided CAA record set only.  A CA, however, is
+   not required to do anything with the client provided record set, and
+   is free to always fetch the record set from the service descriptor.
+
+   onionCAA (optional, object)  The CAA record set defined below.
+
+   The contents of the "onionCAA" object is:
+
+   caa (required, string or null)
+      The CAA record set as a string, encoded in the same way as if was
+      included in the hidden service descriptor.  If the hidden service
+      does not have a CAA record set then this MUST be null.
+
+   expiry (required, integer)
+      The Unix timestamp at which this CAA record set will expire.  This
+      SHOULD NOT be more than 8 hours in the future.  CAs MUST process
+      this as at least a 64-bit integer to ensure functionality beyond
+      2038.
+
+   signature (required, string)
+      The Ed25519 signature of the CAA record set using the private key
+      corresponding to the ".onion" Special-Use Domain Name, encoded
+      using base64url.  The signature is defined below.
+
+   The data that the signature is calculated over is the concatenation
+   of the following:
+
+   "onion-caa|" || expiry || "|" || caa
+
+   Where "|" is the ASCII character 0x7C, and expiry is the expiry field
+   as a decimal string with no leading zeros.
+
+6.4.1.  CAs requiring in-band CAA
+
+   If a CA does not support fetching a service's CAA record set from its
+   service descriptor it, and the ACME client does not provide an
+   "onionCAA" object in its finalize request the CA MUST respond with an
+   "onionCAARequired" error to indicate this.
+
+   Additionally, a new field is defined in the directory "meta" object
+   to signal this.
+
+   onionCAARequired (optional, boolean)
+      If true, the CA requires the client to provide the CAA record set
+      in the finalize request.  If false or absent the CA does not
+      require the client to provide the CAA record set is this manner.
+
+   A directory of such a CA may look like
+
+   HTTP/1.1 200 OK
+   Content-Type: application/json
+
+   {
+     "newNonce": "https://example.com/acme/new-nonce",
+     "newAccount": "https://example.com/acme/new-account",
+     "newOrder": "https://example.com/acme/new-order",
+     "revokeCert": "https://example.com/acme/revoke-cert",
+     "keyChange": "https://example.com/acme/key-change",
+     "meta": {
+       "termsOfService": "https://example.com/acme/terms/2023-10-13",
+       "website": "https://acmeforonions.org/",
+       "caaIdentities": ["test.acmeforonions.org"],
+       "onionCAARequired": true
+     }
+   }
+
+6.4.2.  Example in-band CAA
+
+   Given the following example CAA record set for
+   5anebu2glyc235wbbop3m2ukzlaptpkq333vdtdvcjpigyb7x2i2m2qd.onion:
+
+   caa 128 issue "test.acmeforonions.org; validationmethods=onion-csr-01"
+   caa 0 iodef "mailto:example@example.com"
+
+   The following would be submitted to the CA's finalize endpoint
+
+   POST /acme/order/TOlocE8rfgo/finalize
+   Host: example.com
+   Content-Type: application/jose+json
+
+   {
+     "protected": base64url({
+       "alg": "ES256",
+       "kid": "https://example.com/acme/acct/evOfKhNU60wg",
+       "nonce": "MSF2j2nawWHPxxkE3ZJtKQ",
+       "url": "https://example.com/acme/order/TOlocE8rfgo/finalize"
+     }),
+     "payload": base64url({
+       "csr": "MIIBPTCBxAIBADBFMQ...FS6aKdZeGsysoCo4H9P",
+       "onionCAA": {
+         "caa": "caa 128 issue \"test.acmeforonions.org; validationmethods=onion-csr-01\"\ncaa 0 iodef \"mailto:example@example.com\"",
+         "expiry": 1697210719,
+         "signature": "u_iP6JZ4JZBrzQUKH6lSrWejjRfeQmkTuehc0_FaaTNPAV0RVxpUz9r44DRdy6kgy0ofnx18KIhMrP7N1wpxAA=="
+       }
+     }),
+     "signature": "uOrUfIIk5RyQ...nw62Ay1cl6AB"
+   }
+
 7.  IANA Considerations
 
 7.1.  Validation Methods
@@ -436,6 +561,37 @@ Table of Contents
          +--------------+-----------------+------+---------------+
 
                             Table 1: New entries
+
+7.2.  Error Types
+
+   Per this document, one new entry has been added to the "ACME Error
+   Types" registry defined in [RFC8555] §9.7.8.  This entry is defined
+   below:
+
+     +==================+===============================+===========+
+     | Type             | Description                   | Reference |
+     +==================+===============================+===========+
+     | onionCAARequired | The CA only supports checking | This      |
+     |                  | CAA for hidden services in-   | document  |
+     |                  | band, but the client has not  |           |
+     |                  | provided an in-band CAA       |           |
+     +------------------+-------------------------------+-----------+
+
+                           Table 2: New entries
+
+7.3.  Directory Metadata Fields
+
+   Per this document, one new entry has been added to the "ACME
+   Directory Metadata Fields" registry defined in [RFC8555] §9.7.8.
+   This entry is defined below:
+
+             +==================+============+===============+
+             | Field name       | Field type | Reference     |
+             +==================+============+===============+
+             | onionCAARequired | boolean    | This document |
+             +------------------+------------+---------------+
+
+                            Table 3: New entries
 
 8.  Security Considerations
 
@@ -581,9 +737,9 @@ Table of Contents
    [I-D.ietf-tls-esni]
               Rescorla, E., Oku, K., Sullivan, N., and C. A. Wood, "TLS
               Encrypted Client Hello", Work in Progress, Internet-Draft,
-              draft-ietf-tls-esni-16, 6 April 2023,
+              draft-ietf-tls-esni-17, 9 October 2023,
               <https://datatracker.ietf.org/doc/html/draft-ietf-tls-
-              esni-16>.
+              esni-17>.
 
 Appendix A.  Discussion on the use of the "dns" identifier type
 
