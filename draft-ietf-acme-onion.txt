@@ -92,8 +92,9 @@ Table of Contents
      8.2.  Key Authorization with "onion-csr-01"
      8.3.  Use of Tor for non ".onion" domains
      8.4.  Security of CAA records
-     8.5.  Access of the Tor network
-     8.6.  Anonymity of the ACME client
+     8.5.  In-band CAA
+     8.6.  Access of the Tor network
+     8.7.  Anonymity of the ACME client
    9.  References
      9.1.  Normative References
      9.2.  Informative References
@@ -431,11 +432,8 @@ Table of Contents
 
    A CA may not be willing to operate the infrastructure required to
    fetch, decode, and verify Tor hidden service descriptors in order to
-   check CAA records.  Tor directory servers are inherently untrusted
-   entities, and as such there is no difference in the security model of
-   accepting CAA records directly from the ACME client or fetching them
-   over Tor. To this end a method to signal CAA policies in-band of ACME
-   is defined.
+   check CAA records.  To this end a method to signal CAA policies in-
+   band of ACME is defined.
 
    If a hidden service does use this method to provide CAA records to a
    CA it SHOULD still publish CAA records if its CAA record set includes
@@ -656,13 +654,20 @@ Table of Contents
    could manipulate what is published there.  For more information about
    this process see [tor-rend-spec-v3] § 2.5.3.
 
-8.5.  Access of the Tor network
+8.5.  In-band CAA
+
+   Tor directory servers are inherently untrusted entities, and as such
+   there is no difference in the security model for accepting CAA
+   records directly from the ACME client or fetching them over Tor. CAA
+   records are still verified against the same hidden service key.
+
+8.6.  Access of the Tor network
 
    The ACME server MUST make its own connection to the hidden service
    via the Tor network, and MUST NOT outsource this, such as by using
    Tor2Web.
 
-8.6.  Anonymity of the ACME client
+8.7.  Anonymity of the ACME client
 
    ACME clients requesting certificates for ".onion" Special-Use Domain
    Names may expose the existence of a hidden service on the host to

@@ -1237,10 +1237,13 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 <p id="section-toc.1-1.8.2.4.1"><a href="#section-8.4" class="auto internal xref">8.4</a>.  <a href="#name-security-of-caa-records" class="internal xref">Security of CAA records</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.5">
-                <p id="section-toc.1-1.8.2.5.1"><a href="#section-8.5" class="auto internal xref">8.5</a>.  <a href="#name-access-of-the-tor-network" class="internal xref">Access of the Tor network</a></p>
+                <p id="section-toc.1-1.8.2.5.1"><a href="#section-8.5" class="auto internal xref">8.5</a>.  <a href="#name-in-band-caa" class="internal xref">In-band CAA</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.6">
-                <p id="section-toc.1-1.8.2.6.1"><a href="#section-8.6" class="auto internal xref">8.6</a>.  <a href="#name-anonymity-of-the-acme-clien" class="internal xref">Anonymity of the ACME client</a></p>
+                <p id="section-toc.1-1.8.2.6.1"><a href="#section-8.6" class="auto internal xref">8.6</a>.  <a href="#name-access-of-the-tor-network" class="internal xref">Access of the Tor network</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.7">
+                <p id="section-toc.1-1.8.2.7.1"><a href="#section-8.7" class="auto internal xref">8.7</a>.  <a href="#name-anonymity-of-the-acme-clien" class="internal xref">Anonymity of the ACME client</a></p>
 </li>
             </ul>
 </li>
@@ -1607,9 +1610,7 @@ introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3KHCZUZ3C6tX
 <a href="#section-6.4" class="section-number selfRef">6.4. </a><a href="#name-alternative-in-band-present" class="section-name selfRef">Alternative in-band presentation of CAA</a>
         </h3>
 <p id="section-6.4-1">A CA may not be willing to operate the infrastructure required to fetch, decode, and verify Tor hidden service
-          descriptors in order to check CAA records. Tor directory servers are inherently untrusted entities, and as such
-          there is no difference in the security model of accepting CAA records directly from the ACME client or fetching
-          them over Tor. To this end a method to signal CAA policies in-band of ACME is defined.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
+          descriptors in order to check CAA records. To this end a method to signal CAA policies in-band of ACME is defined.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
 <p id="section-6.4-2">If a hidden service does use this method to provide CAA records to a CA it <span class="bcp14">SHOULD</span> still publish
           CAA records if its CAA record set includes "iodef", "contactemail", or "contactphone" so that this information
           is still publicly accessible. A hidden service operator <span class="bcp14">MAY</span> also not wish to publish a CAA
@@ -1894,22 +1895,30 @@ Content-Type: application/jose+json
           process see <span>[<a href="#tor-rend-spec-v3" class="cite xref">tor-rend-spec-v3</a>]</span> § 2.5.3.<a href="#section-8.4-1" class="pilcrow">¶</a></p>
 </section>
 <section id="section-8.5">
-        <h3 id="name-access-of-the-tor-network">
-<a href="#section-8.5" class="section-number selfRef">8.5. </a><a href="#name-access-of-the-tor-network" class="section-name selfRef">Access of the Tor network</a>
+        <h3 id="name-in-band-caa">
+<a href="#section-8.5" class="section-number selfRef">8.5. </a><a href="#name-in-band-caa" class="section-name selfRef">In-band CAA</a>
         </h3>
-<p id="section-8.5-1">The ACME server <span class="bcp14">MUST</span> make its own connection to the hidden service via the Tor network,
-          and <span class="bcp14">MUST NOT</span> outsource this, such as by using Tor2Web.<a href="#section-8.5-1" class="pilcrow">¶</a></p>
+<p id="section-8.5-1">Tor directory servers are inherently untrusted entities, and as such there is no difference in the security
+          model for accepting CAA records directly from the ACME client or fetching them over Tor. CAA records are still
+          verified against the same hidden service key.<a href="#section-8.5-1" class="pilcrow">¶</a></p>
 </section>
 <section id="section-8.6">
-        <h3 id="name-anonymity-of-the-acme-clien">
-<a href="#section-8.6" class="section-number selfRef">8.6. </a><a href="#name-anonymity-of-the-acme-clien" class="section-name selfRef">Anonymity of the ACME client</a>
+        <h3 id="name-access-of-the-tor-network">
+<a href="#section-8.6" class="section-number selfRef">8.6. </a><a href="#name-access-of-the-tor-network" class="section-name selfRef">Access of the Tor network</a>
         </h3>
-<p id="section-8.6-1">ACME clients requesting certificates for ".onion" Special-Use Domain Names may expose the existence of a
+<p id="section-8.6-1">The ACME server <span class="bcp14">MUST</span> make its own connection to the hidden service via the Tor network,
+          and <span class="bcp14">MUST NOT</span> outsource this, such as by using Tor2Web.<a href="#section-8.6-1" class="pilcrow">¶</a></p>
+</section>
+<section id="section-8.7">
+        <h3 id="name-anonymity-of-the-acme-clien">
+<a href="#section-8.7" class="section-number selfRef">8.7. </a><a href="#name-anonymity-of-the-acme-clien" class="section-name selfRef">Anonymity of the ACME client</a>
+        </h3>
+<p id="section-8.7-1">ACME clients requesting certificates for ".onion" Special-Use Domain Names may expose the existence of a
         hidden service on the host to unintended parties - even when features such as ECH
           <span>[<a href="#I-D.ietf-tls-esni" class="cite xref">I-D.ietf-tls-esni</a>]</span> are utilised, as the IP addresses of ACME servers are generally
-          well-known, static, and not used for any other purpose.<a href="#section-8.6-1" class="pilcrow">¶</a></p>
-<p id="section-8.6-2">ACME clients <span class="bcp14">SHOULD</span> connect to ACME servers over the Tor network to alleviate this, preferring
-        a hidden service endpoint if the CA provides such a service.<a href="#section-8.6-2" class="pilcrow">¶</a></p>
+          well-known, static, and not used for any other purpose.<a href="#section-8.7-1" class="pilcrow">¶</a></p>
+<p id="section-8.7-2">ACME clients <span class="bcp14">SHOULD</span> connect to ACME servers over the Tor network to alleviate this, preferring
+        a hidden service endpoint if the CA provides such a service.<a href="#section-8.7-2" class="pilcrow">¶</a></p>
 </section>
 </section>
 </div>
