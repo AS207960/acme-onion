@@ -325,18 +325,20 @@ introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3KHCZUZ3C6tX
           CAA records if its CAA record set includes "iodef", "contactemail", or "contactphone" so that this information
           is still publicly accessible. A hidden service operator <bcp14>MAY</bcp14> also not wish to publish a CAA
           record set in its service descriptor to avoid revealing information about the service operator.</t>
-        <t>A new field is defined in the ACME finalize endpoint to contain the hidden service's CAA record set
-          If a CA receives a validly signed CAA record set in the finalize request it need not check the CAA set in
+        <t>If a CA receives a validly signed CAA record set in the finalize request it need not check the CAA set in
           the hidden service descriptor and can proceed with issuance on the basis of the client provided CAA record set
           only. A CA, however, is not required to do anything with the client provided record set, and is free to always
           fetch the record set from the service descriptor.</t>
+        <t>A new field is defined in the ACME finalize endpoint to contain the hidden service's CAA record set for each
+          ".onion" Special-Use Domain Name in the order.</t>
         <dl>
-          <dt>onionCAA (optional, object)</dt>
+          <dt>onionCAA (optional, dictionary of objects)</dt>
           <dd>
-            The CAA record set defined below.
+            The CAA record set for each ".onion" Special-Use Domain Name in the order. The key is the ".onion" Special-Use
+            Domain Name, and the value is an object with the following fields.
           </dd>
         </dl>
-        <t>The contents of the "onionCAA" object is:</t>
+        <t>The contents of the "onionCAA" object are:</t>
         <dl>
           <dt>caa (required, string or null)</dt>
           <dd>
@@ -355,7 +357,8 @@ introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3KHCZUZ3C6tX
             Special-Use Domain Name, encoded using base64url. The signature is defined below.
           </dd>
         </dl>
-        <t>The data that the signature is calculated over is the concatenation of the following:</t>
+        <t>The data that the signature is calculated over is the concatenation of the following,
+          encoded in UTF-8 <xref target="RFC3629"/>:</t>
         <sourcecode>"onion-caa|" || expiry || "|" || caa</sourcecode>
         <t>Where "|" is the ASCII character 0x7C, and expiry is the expiry field as a decimal string with no
           leading zeros.</t>
@@ -366,7 +369,7 @@ introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3KHCZUZ3C6tX
             with an "onionCAARequired" error to indicate this.</t>
           <t>Additionally, a new field is defined in the directory "meta" object to signal this.</t>
           <dl>
-            <dt>onionCAARequired (optional, boolean)</dt>
+            <dt>inBandOnionCAARequired (optional, boolean)</dt>
             <dd>
               If true, the CA requires the client to provide the CAA record set in the finalize request.
               If false or absent the CA does not require the client to provide the CAA record set is this manner.
@@ -387,7 +390,7 @@ Content-Type: application/json
     "termsOfService": "https://example.com/acme/terms/2023-10-13",
     "website": "https://acmeforonions.org/",
     "caaIdentities": ["test.acmeforonions.org"],
-    "onionCAARequired": true
+    "inBandOnionCAARequired": true
   }
 }
           </sourcecode>
@@ -415,9 +418,11 @@ Content-Type: application/jose+json
   "payload": base64url({
     "csr": "MIIBPTCBxAIBADBFMQ...FS6aKdZeGsysoCo4H9P",
     "onionCAA": {
-      "caa": "caa 128 issue \"test.acmeforonions.org; validationmethods=onion-csr-01\"\ncaa 0 iodef \"mailto:example@example.com\"",
-      "expiry": 1697210719,
-      "signature": "u_iP6JZ4JZBrzQUKH6lSrWejjRfeQmkTuehc0_FaaTNPAV0RVxpUz9r44DRdy6kgy0ofnx18KIhMrP7N1wpxAA=="
+      "5anebu2glyc235wbbop3m2ukzlaptpkq333vdtdvcjpigyb7x2i2m2qd.onion": {
+        "caa": "caa 128 issue \"test.acmeforonions.org; validationmethods=onion-csr-01\"\ncaa 0 iodef \"mailto:example@example.com\"",
+        "expiry": 1697210719,
+        "signature": "u_iP6JZ4JZBrzQUKH6lSrWejjRfeQmkTuehc0_FaaTNPAV0RVxpUz9r44DRdy6kgy0ofnx18KIhMrP7N1wpxAA=="
+      }
     }
   }),
   "signature": "uOrUfIIk5RyQ...nw62Ay1cl6AB"
@@ -590,6 +595,7 @@ Content-Type: application/jose+json
         <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.8555.xml"/>
         <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.8659.xml"/>
         <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.8737.xml"/>
+        <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.3629.xml"/>
 
         <reference anchor="tor-address-spec" target="https://spec.torproject.org/address-spec">
           <front>
