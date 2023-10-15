@@ -4,8 +4,8 @@
 
 Automated Certificate Management Environment              Q. Misell, Ed.
 Internet-Draft                                                  AS207960
-Intended status: Standards Track                         13 October 2023
-Expires: 15 April 2024
+Intended status: Standards Track                         15 October 2023
+Expires: 17 April 2024
 
 
    Automated Certificate Management Environment (ACME) Extensions for
@@ -44,7 +44,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 April 2024.
+   This Internet-Draft will expire on 17 April 2024.
 
 Copyright Notice
 
@@ -442,17 +442,23 @@ Table of Contents
    wish to publish a CAA record set in its service descriptor to avoid
    revealing information about the service operator.
 
+   If a CA receives a validly signed CAA record set in the finalize
+   request it need not check the CAA set in the hidden service
+   descriptor and can proceed with issuance on the basis of the client
+   provided CAA record set only.  A CA, however, is not required to do
+   anything with the client provided record set, and is free to always
+   fetch the record set from the service descriptor.
+
    A new field is defined in the ACME finalize endpoint to contain the
-   hidden service's CAA record set If a CA receives a validly signed CAA
-   record set in the finalize request it need not check the CAA set in
-   the hidden service descriptor and can proceed with issuance on the
-   basis of the client provided CAA record set only.  A CA, however, is
-   not required to do anything with the client provided record set, and
-   is free to always fetch the record set from the service descriptor.
+   hidden service's CAA record set for each ".onion" Special-Use Domain
+   Name in the order.
 
-   onionCAA (optional, object)  The CAA record set defined below.
+   onionCAA (optional, dictionary of objects)
+      The CAA record set for each ".onion" Special-Use Domain Name in
+      the order.  The key is the ".onion" Special-Use Domain Name, and
+      the value is an object with the following fields.
 
-   The contents of the "onionCAA" object is:
+   The contents of the "onionCAA" object are:
 
    caa (required, string or null)
       The CAA record set as a string, encoded in the same way as if was
@@ -471,7 +477,7 @@ Table of Contents
       using base64url.  The signature is defined below.
 
    The data that the signature is calculated over is the concatenation
-   of the following:
+   of the following, encoded in UTF-8 [RFC3629]:
 
    "onion-caa|" || expiry || "|" || caa
 
@@ -488,7 +494,7 @@ Table of Contents
    Additionally, a new field is defined in the directory "meta" object
    to signal this.
 
-   onionCAARequired (optional, boolean)
+   inBandOnionCAARequired (optional, boolean)
       If true, the CA requires the client to provide the CAA record set
       in the finalize request.  If false or absent the CA does not
       require the client to provide the CAA record set is this manner.
@@ -508,7 +514,7 @@ Table of Contents
        "termsOfService": "https://example.com/acme/terms/2023-10-13",
        "website": "https://acmeforonions.org/",
        "caaIdentities": ["test.acmeforonions.org"],
-       "onionCAARequired": true
+       "inBandOnionCAARequired": true
      }
    }
 
@@ -536,9 +542,11 @@ Table of Contents
      "payload": base64url({
        "csr": "MIIBPTCBxAIBADBFMQ...FS6aKdZeGsysoCo4H9P",
        "onionCAA": {
-         "caa": "caa 128 issue \"test.acmeforonions.org; validationmethods=onion-csr-01\"\ncaa 0 iodef \"mailto:example@example.com\"",
-         "expiry": 1697210719,
-         "signature": "u_iP6JZ4JZBrzQUKH6lSrWejjRfeQmkTuehc0_FaaTNPAV0RVxpUz9r44DRdy6kgy0ofnx18KIhMrP7N1wpxAA=="
+         "5anebu2glyc235wbbop3m2ukzlaptpkq333vdtdvcjpigyb7x2i2m2qd.onion": {
+           "caa": "caa 128 issue \"test.acmeforonions.org; validationmethods=onion-csr-01\"\ncaa 0 iodef \"mailto:example@example.com\"",
+           "expiry": 1697210719,
+           "signature": "u_iP6JZ4JZBrzQUKH6lSrWejjRfeQmkTuehc0_FaaTNPAV0RVxpUz9r44DRdy6kgy0ofnx18KIhMrP7N1wpxAA=="
+         }
        }
      }),
      "signature": "uOrUfIIk5RyQ...nw62Ay1cl6AB"
@@ -719,6 +727,10 @@ Table of Contents
               Negotiation (ALPN) Challenge Extension", RFC 8737,
               DOI 10.17487/RFC8737, February 2020,
               <https://www.rfc-editor.org/info/rfc8737>.
+
+   [RFC3629]  Yergeau, F., "UTF-8, a transformation format of ISO
+              10646", STD 63, RFC 3629, DOI 10.17487/RFC3629, November
+              2003, <https://www.rfc-editor.org/info/rfc3629>.
 
    [tor-address-spec]
               Nick Mathewson, N., "Special Hostnames in Tor",

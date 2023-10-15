@@ -1039,7 +1039,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Misell</td>
-<td class="center">Expires 15 April 2024</td>
+<td class="center">Expires 17 April 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1052,12 +1052,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-acme-onion-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-10-13" class="published">13 October 2023</time>
+<time datetime="2023-10-15" class="published">15 October 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-04-15">15 April 2024</time></dd>
+<dd class="expires"><time datetime="2024-04-17">17 April 2024</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1103,7 +1103,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 15 April 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 17 April 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1615,46 +1615,49 @@ introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3KHCZUZ3C6tX
           CAA records if its CAA record set includes "iodef", "contactemail", or "contactphone" so that this information
           is still publicly accessible. A hidden service operator <span class="bcp14">MAY</span> also not wish to publish a CAA
           record set in its service descriptor to avoid revealing information about the service operator.<a href="#section-6.4-2" class="pilcrow">¶</a></p>
-<p id="section-6.4-3">A new field is defined in the ACME finalize endpoint to contain the hidden service's CAA record set
-          If a CA receives a validly signed CAA record set in the finalize request it need not check the CAA set in
+<p id="section-6.4-3">If a CA receives a validly signed CAA record set in the finalize request it need not check the CAA set in
           the hidden service descriptor and can proceed with issuance on the basis of the client provided CAA record set
           only. A CA, however, is not required to do anything with the client provided record set, and is free to always
           fetch the record set from the service descriptor.<a href="#section-6.4-3" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlParallel" id="section-6.4-4">
-          <dt id="section-6.4-4.1">onionCAA (optional, object)</dt>
-          <dd style="margin-left: 1.5em" id="section-6.4-4.2">
-            The CAA record set defined below.<a href="#section-6.4-4.2" class="pilcrow">¶</a>
+<p id="section-6.4-4">A new field is defined in the ACME finalize endpoint to contain the hidden service's CAA record set for each
+          ".onion" Special-Use Domain Name in the order.<a href="#section-6.4-4" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-6.4-5">
+          <dt id="section-6.4-5.1">onionCAA (optional, dictionary of objects)</dt>
+          <dd style="margin-left: 1.5em" id="section-6.4-5.2">
+            The CAA record set for each ".onion" Special-Use Domain Name in the order. The key is the ".onion" Special-Use
+            Domain Name, and the value is an object with the following fields.<a href="#section-6.4-5.2" class="pilcrow">¶</a>
 </dd>
         <dd class="break"></dd>
 </dl>
-<p id="section-6.4-5">The contents of the "onionCAA" object is:<a href="#section-6.4-5" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlParallel" id="section-6.4-6">
-          <dt id="section-6.4-6.1">caa (required, string or null)</dt>
-          <dd style="margin-left: 1.5em" id="section-6.4-6.2">
+<p id="section-6.4-6">The contents of the "onionCAA" object are:<a href="#section-6.4-6" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-6.4-7">
+          <dt id="section-6.4-7.1">caa (required, string or null)</dt>
+          <dd style="margin-left: 1.5em" id="section-6.4-7.2">
             The CAA record set as a string, encoded in the same way as if was included in the hidden service descriptor.
-            If the hidden service does not have a CAA record set then this <span class="bcp14">MUST</span> be null.<a href="#section-6.4-6.2" class="pilcrow">¶</a>
+            If the hidden service does not have a CAA record set then this <span class="bcp14">MUST</span> be null.<a href="#section-6.4-7.2" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-6.4-6.3">expiry (required, integer)</dt>
-          <dd style="margin-left: 1.5em" id="section-6.4-6.4">
+<dt id="section-6.4-7.3">expiry (required, integer)</dt>
+          <dd style="margin-left: 1.5em" id="section-6.4-7.4">
             The Unix timestamp at which this CAA record set will expire. This <span class="bcp14">SHOULD NOT</span> be more than
             8 hours in the future. CAs <span class="bcp14">MUST</span> process this as at least a 64-bit integer to ensure
-            functionality beyond 2038.<a href="#section-6.4-6.4" class="pilcrow">¶</a>
+            functionality beyond 2038.<a href="#section-6.4-7.4" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-6.4-6.5">signature (required, string)</dt>
-          <dd style="margin-left: 1.5em" id="section-6.4-6.6">
+<dt id="section-6.4-7.5">signature (required, string)</dt>
+          <dd style="margin-left: 1.5em" id="section-6.4-7.6">
             The Ed25519 signature of the CAA record set using the private key corresponding to the ".onion"
-            Special-Use Domain Name, encoded using base64url. The signature is defined below.<a href="#section-6.4-6.6" class="pilcrow">¶</a>
+            Special-Use Domain Name, encoded using base64url. The signature is defined below.<a href="#section-6.4-7.6" class="pilcrow">¶</a>
 </dd>
         <dd class="break"></dd>
 </dl>
-<p id="section-6.4-7">The data that the signature is calculated over is the concatenation of the following:<a href="#section-6.4-7" class="pilcrow">¶</a></p>
-<div class="sourcecode" id="section-6.4-8">
-<pre>"onion-caa|" || expiry || "|" || caa</pre><a href="#section-6.4-8" class="pilcrow">¶</a>
+<p id="section-6.4-8">The data that the signature is calculated over is the concatenation of the following,
+          encoded in UTF-8 <span>[<a href="#RFC3629" class="cite xref">RFC3629</a>]</span>:<a href="#section-6.4-8" class="pilcrow">¶</a></p>
+<div class="sourcecode" id="section-6.4-9">
+<pre>"onion-caa|" || expiry || "|" || caa</pre><a href="#section-6.4-9" class="pilcrow">¶</a>
 </div>
-<p id="section-6.4-9">Where "|" is the ASCII character 0x7C, and expiry is the expiry field as a decimal string with no
-          leading zeros.<a href="#section-6.4-9" class="pilcrow">¶</a></p>
+<p id="section-6.4-10">Where "|" is the ASCII character 0x7C, and expiry is the expiry field as a decimal string with no
+          leading zeros.<a href="#section-6.4-10" class="pilcrow">¶</a></p>
 <section id="section-6.4.1">
           <h4 id="name-cas-requiring-in-band-caa">
 <a href="#section-6.4.1" class="section-number selfRef">6.4.1. </a><a href="#name-cas-requiring-in-band-caa" class="section-name selfRef">CAs requiring in-band CAA</a>
@@ -1664,7 +1667,7 @@ introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3KHCZUZ3C6tX
             with an "onionCAARequired" error to indicate this.<a href="#section-6.4.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.4.1-2">Additionally, a new field is defined in the directory "meta" object to signal this.<a href="#section-6.4.1-2" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-6.4.1-3">
-            <dt id="section-6.4.1-3.1">onionCAARequired (optional, boolean)</dt>
+            <dt id="section-6.4.1-3.1">inBandOnionCAARequired (optional, boolean)</dt>
             <dd style="margin-left: 1.5em" id="section-6.4.1-3.2">
               If true, the CA requires the client to provide the CAA record set in the finalize request.
               If false or absent the CA does not require the client to provide the CAA record set is this manner.<a href="#section-6.4.1-3.2" class="pilcrow">¶</a>
@@ -1687,7 +1690,7 @@ Content-Type: application/json
     "termsOfService": "https://example.com/acme/terms/2023-10-13",
     "website": "https://acmeforonions.org/",
     "caaIdentities": ["test.acmeforonions.org"],
-    "onionCAARequired": true
+    "inBandOnionCAARequired": true
   }
 }
 </pre><a href="#section-6.4.1-5" class="pilcrow">¶</a>
@@ -1721,9 +1724,11 @@ Content-Type: application/jose+json
   "payload": base64url({
     "csr": "MIIBPTCBxAIBADBFMQ...FS6aKdZeGsysoCo4H9P",
     "onionCAA": {
-      "caa": "caa 128 issue \"test.acmeforonions.org; validationmethods=onion-csr-01\"\ncaa 0 iodef \"mailto:example@example.com\"",
-      "expiry": 1697210719,
-      "signature": "u_iP6JZ4JZBrzQUKH6lSrWejjRfeQmkTuehc0_FaaTNPAV0RVxpUz9r44DRdy6kgy0ofnx18KIhMrP7N1wpxAA=="
+      "5anebu2glyc235wbbop3m2ukzlaptpkq333vdtdvcjpigyb7x2i2m2qd.onion": {
+        "caa": "caa 128 issue \"test.acmeforonions.org; validationmethods=onion-csr-01\"\ncaa 0 iodef \"mailto:example@example.com\"",
+        "expiry": 1697210719,
+        "signature": "u_iP6JZ4JZBrzQUKH6lSrWejjRfeQmkTuehc0_FaaTNPAV0RVxpUz9r44DRdy6kgy0ofnx18KIhMrP7N1wpxAA=="
+      }
     }
   }),
   "signature": "uOrUfIIk5RyQ...nw62Ay1cl6AB"
@@ -1963,6 +1968,10 @@ Content-Type: application/jose+json
 <dt id="RFC8737">[RFC8737]</dt>
         <dd>
 <span class="refAuthor">Shoemaker, R.B.</span>, <span class="refTitle">"Automated Certificate Management Environment (ACME) TLS Application-Layer Protocol Negotiation (ALPN) Challenge Extension"</span>, <span class="seriesInfo">RFC 8737</span>, <span class="seriesInfo">DOI 10.17487/RFC8737</span>, <time datetime="2020-02" class="refDate">February 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8737">https://www.rfc-editor.org/info/rfc8737</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC3629">[RFC3629]</dt>
+        <dd>
+<span class="refAuthor">Yergeau, F.</span>, <span class="refTitle">"UTF-8, a transformation format of ISO 10646"</span>, <span class="seriesInfo">STD 63</span>, <span class="seriesInfo">RFC 3629</span>, <span class="seriesInfo">DOI 10.17487/RFC3629</span>, <time datetime="2003-11" class="refDate">November 2003</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc3629">https://www.rfc-editor.org/info/rfc3629</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="tor-address-spec">[tor-address-spec]</dt>
         <dd>
