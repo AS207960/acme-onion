@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-09-10T00:48:25.293993+00:00",
+  "timestamp": "2023-10-17T00:46:57.934509+00:00",
   "repo": "AS207960/acme-onion",
   "labels": [
     {
@@ -62,9 +62,17 @@
       "labels": [],
       "body": "As discussed in the CA/BForum Validation subcommittee today, let's further investigate the possibility for the CAA information to be acquired without the CA having to operate a whole Tor client.\r\n\r\nTwo possibilities were mentioned:\r\n1) The CA acquires the hidden service descriptor via plain HTTP from the collection of directory authorities. I believe this requires some understanding of the Tor protocol, in order to collect and verify the consensus from those authorities, but no need to operate a fully-fledged Tor client.\r\n2) The applicant supplies their hidden service descriptor to the CA in a POST message.\r\n\r\nIn both cases, once the CA has the hidden service descriptor, it then only needs to be able to derive the blinded key to decrypt the first layer hidden service descriptor, use its own ephemeral client key to decrypt the second layer hidden service descriptor, and then parse the CAA information contained there.\r\n\r\nThe first possibility is certainly easier for existing Tor services; they just keep doing what they're doing. The second possibility is easier for ACME Servers, as they can get by with a lesser understanding of the Tor directory authorities and their consensus.\r\n\r\nPeople also proposed a number of variants for (2):\r\n\r\na) The hidden service descriptor can be supplied in the \"please check now\" POST message to the challenge object (the same message as onion-csr-01's CSR).\r\n  - This is the most straightforward, but it means that the order must be finalized within 8 hours of the challenge being fulfilled so that the CAA information is fresh enough to abide by BRs 3.2.2.8.\r\n  - This also isn't directly portable to non-ACME issuance flows; other protocols would have to figure out a slightly different place to put this information.\r\n\r\nb) Multiple hidden service descriptors (one for each identifier in the order) can be supplied in the POST message to the finalize endpoint (the same message as the default ACME CSR)\r\n  - This ensures that the CAA information is fully up-to-date at the moment of issuance.\r\n  - But it requires a more complex JSON structure to associate each descriptor with its identifier, and could make finalize POSTs very large.\r\n\r\nc) Like (a), but the hidden service descriptor(s) is/are contained directly in the CSR itself, rather than a separate field in the challenge request\r\n  - This only works for the onion-csr-01 method, as the other Tor validation methods don't include a CSR in the challenge request\r\n  - This requires standardizing a new ASN.1 extension to encode the descriptor in the CSR\r\n  - But it allows the same mechanism to be used by non-ACME issuance flows\r\n  - And it has the same \"8 hours\" issues as (a)\r\n\r\nd) Like (b), but the hidden service descriptor(s) is/are contained directly in the CSR itself, rather than a separate field in the finalize request\r\n  - This has the same downsides regarding encoding as (c), and regarding request size as (b)\r\n  - It's more portable to non-ACME than (a) or (b), but less than (c), because many non-ACME flows get the CSR at the very beginning, which may be much more than 8 hours before issuance\r\n\r\ne) Like (c), but the information is just the CAA records, not the full hidden service descriptor\r\n  - This only works with (c) because that's the only one of the above where the object containing the hidden service descriptor is already signed by the Tor service key, which is the same key that signs the descriptor itself\r\n  - It has all the same upsides and downsides as (c), except for easier parsing on the CA side\r\n\r\nClearly, all of the above have some issues. I'm sure that possibility (1) also has some interesting variants, and some interesting issues, but I'm much less familiar with it. I'd like to learn more about (1), and see which of the variants of (2) seems to be the least-bad.",
       "createdAt": "2023-09-07T16:25:43Z",
-      "updatedAt": "2023-09-07T16:25:43Z",
+      "updatedAt": "2023-10-16T11:36:53Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "TheEnbyperor",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "After some discussion with the Tor project I've decided to include something between (e) and (b) in the draft, but not preclude a CA from getting CAA records from the hidden service descriptor if it so desires. \r\n\r\nThis is specified in the [new section 6.4](https://as207960.github.io/acme-onion/draft-ietf-acme-onion.html#name-alternative-in-band-present). I'll submit this as an actual I-D before the next IETF once I've tested it and worked out whatever kinks arise.",
+          "createdAt": "2023-10-16T11:36:52Z",
+          "updatedAt": "2023-10-16T11:36:52Z"
+        }
+      ]
     }
   ],
   "pulls": [
