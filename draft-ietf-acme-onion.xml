@@ -107,14 +107,16 @@
         <section>
           <name>Existing "http-01" Challenge</name>
           <t>The "http-01" challenge is defined as in <xref target="RFC8555" section="8.3"/> can be used to validate a
-            ".onion" Special-Use Domain Names, with the modifications defined in this standard.</t>
+            ".onion" Special-Use Domain Names, with the modifications defined in this standard, namely
+            <xref target="client-auth" format="title"/> and <xref target="caa" format="title"/>.</t>
           <t>The ACME server <bcp14>SHOULD</bcp14> follow redirects; note that these <bcp14>MAY</bcp14> be redirects to
             non ".onion" services, and the server <bcp14>SHOULD</bcp14> honour these.</t>
         </section>
         <section>
           <name>Existing "tls-alpn-01" Challenge</name>
           <t>The "tls-alpn-01" challenge is defined as in <xref target="RFC8737"/> can be used to validate a ".onion"
-            Special-Use Domain Names, with the modifications defined in this standard.</t>
+            Special-Use Domain Names, with the modifications defined in this standard, namely
+            <xref target="client-auth" format="title"/> and <xref target="caa" format="title"/>.</t>
         </section>
       </section>
       <section>
@@ -220,7 +222,7 @@ Content-Type: application/jose+json
       </section>
     </section>
 
-    <section>
+    <section anchor="client-auth">
       <name>Client authentication to hidden services</name>
       <t>Some hidden services do not wish to be accessible to the entire Tor network, and so encrypt their hidden
         service descriptor with the keys of clients authorized to connect. Without a way for the CA to signal what key
@@ -253,13 +255,13 @@ Content-Type: application/jose+json
 
     <section>
       <name>ACME over hidden services</name>
-      <t>A CA offering certificates to ".onion" Special-Use Domain Names <bcp14>SHOULD</bcp14> strongly consider
-        making their ACME server available as a Tor hidden services. ACME clients <bcp14>SHOULD</bcp14> also support
-        connecting to ACME servers over Tor, regardless of their support of "onion-csr-01", as their existing "http-01"
+      <t>A CA offering certificates to ".onion" Special-Use Domain Names is <bcp14>RECOMMENDED</bcp14> to make their
+        ACME server available as a Tor hidden services. ACME clients <bcp14>SHOULD</bcp14> also support connecting to
+        ACME servers over Tor, regardless of their support of "onion-csr-01", as their existing "http-01"
         and "tls-alpn-01" implementations could be used to obtain certificates for ".onion" Special-Use Domain Names.</t>
     </section>
 
-    <section>
+    <section anchor="caa">
       <name>Certification Authority Authorization (CAA)</name>
       <t>".onion" Special-Use Domain Name are not part of the DNS, and as such a variation on CAA <xref target="RFC8659"/>
         is necessary to allow restrictions to be placed on certificate issuance.</t>
