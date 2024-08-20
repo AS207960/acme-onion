@@ -131,8 +131,8 @@
           <dd>The string <tt>onion-csr-01</tt></dd>
           <dt>nonce (required, string)</dt>
           <dd>A Base64 <xref target="RFC4648"/> encoded nonce, including padding characters.
-            It <bcp14>MUST</bcp14> contain at least 64 bits of entropy. It <bcp14>MUST NOT</bcp14> be valid for more
-            than 30 days.</dd>
+            It <bcp14>MUST</bcp14> contain at least 64 bits of entropy. A response generating using this nonce
+            <bcp14>MUST NOT</bcp14> be accepted by the ACME server if the nonce was generated more than 30 days ago.</dd>
           <dt>authKey (optional, object)</dt>
           <dd>The Ed25519 public key encoded as per <xref target="RFC8037"/>.</dd>
         </dl>
@@ -372,7 +372,7 @@ introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3KHCZUZ3C6tX
           encoded in UTF-8 <xref target="RFC3629"/>:</t>
         <sourcecode>"onion-caa|" || expiry || "|" || caa</sourcecode>
         <t>Where "|" is the ASCII character 0x7C, and expiry is the expiry field as a decimal string with no
-          leading zeros.</t>
+          leading zeros. If the caa field is null it is represented as an empty string in the signature calculation.</t>
         <section>
           <name>ACME servers requiring in-band CAA</name>
           <t>If an ACME server does not support fetching a service's CAA record set from its service descriptor it,
@@ -602,6 +602,9 @@ Content-Type: application/jose+json
           well-known, static, and not used for any other purpose.</t>
         <t>ACME clients <bcp14>SHOULD</bcp14> connect to ACME servers over the Tor network to alleviate this, preferring
         a hidden service endpoint if the CA provides such a service.</t>
+        <t>If an ACME client requests a publicly trusted WebPKI certificate it will expose the existence of the Hidden
+          Service publicly due to its inclusion in Certificate Transparency logs <xref target="RFC9162"/>. Hidden Service
+          operators <bcp14>SHOULD</bcp14> consider the privacy implications of this before requesting certificates.</t>
       </section>
     </section>
   </middle>
@@ -665,13 +668,14 @@ Content-Type: application/jose+json
         </reference>
 
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-tls-esni.xml"/>
+        <xi:include href="https://www.rfc-editor.org/refs/bibxml/reference.RFC.9162.xml"/>
       </references>
     </references>
 
     <section anchor="use-of-id-dns">
       <name>Discussion on the use of the "dns" identifier type</name>
       <t>The reasons for utilising the "dns" identifier type in ACME and not defining a new identifier type for
-        ".onion" s may not seem obvious at first glance. After all, ".onion" Special-Use Domain
+        ".onion"s may not seem obvious at first glance. After all, ".onion" Special-Use Domain
         Names are not part of the DNS infrastructure and as such why should they use the "dns" identifier type?</t>
       <t><xref target="cabf-br" section="B.2.a.ii" relative="#page=124"/> defines, and this standard allows,
         using the "http-01" or "tls-alpn-01" validation methods already present in ACME (with some considerations).
