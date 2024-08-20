@@ -108,7 +108,7 @@
           <name>Existing "http-01" Challenge</name>
           <t>The "http-01" challenge as defined in <xref target="RFC8555" section="8.3"/> can be used to validate a
             ".onion" Special-Use Domain Names, with the modifications defined in this standard, namely
-            <xref target="client-auth" format="title"/> and <xref target="caa" format="title"/>.</t>
+            <xref target="client-auth" format="title"/>, and <xref target="caa" format="title"/>.</t>
           <t>The ACME server <bcp14>SHOULD</bcp14> follow redirects; note that these <bcp14>MAY</bcp14> be redirects to
             non ".onion" services, and the server <bcp14>SHOULD</bcp14> honour these.</t>
         </section>
@@ -116,7 +116,7 @@
           <name>Existing "tls-alpn-01" Challenge</name>
           <t>The "tls-alpn-01" challenge as defined in <xref target="RFC8737"/> can be used to validate a ".onion"
             Special-Use Domain Names, with the modifications defined in this standard, namely
-            <xref target="client-auth" format="title"/> and <xref target="caa" format="title"/>.</t>
+            <xref target="client-auth" format="title"/>, and <xref target="caa" format="title"/>.</t>
         </section>
       </section>
       <section>
