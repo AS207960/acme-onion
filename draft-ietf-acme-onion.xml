@@ -76,18 +76,21 @@
         when requesting a certificate for a ".onion" Special-Use Domain Name. The value of identifier
         <bcp14>MUST</bcp14> be the textual representation as defined in
         <xref target="tor-address-spec" section=".onion" relative="#onion"/>. The value <bcp14>MAY</bcp14> include
-        subdomain labels. Version 2 addresses <bcp14>MUST NOT</bcp14> be used as these are now considered insecure.</t>
-      <t>Example identifiers:</t>
+        subdomain labels. Version 2 addresses <xref target="tor-rend-spec-v2"/> <bcp14>MUST NOT</bcp14> be used as these
+        are now considered insecure.</t>
+      <t>Example identifiers (linebreaks have been added for readability only):</t>
       <sourcecode type="json">
 {
   "type": "dns",
-  "value": "bbcweb3hytmzhn5d532owbu6oqadra5z3ar726vq5kgwwn6aucdccrad.onion"
+  "value": "bbcweb3hytmzhn5d532owbu6oqadra5z3ar726v
+        q5kgwwn6aucdccrad.onion"
 }
       </sourcecode>
       <sourcecode type="json">
 {
   "type": "dns",
-  "value": "www.bbcweb3hytmzhn5d532owbu6oqadra5z3ar726vq5kgwwn6aucdccrad.onion"
+  "value": "www.bbcweb3hytmzhn5d532owbu6oqadra5z3ar726v
+        q5kgwwn6aucdccrad.onion"
 }
       </sourcecode>
     </section>
@@ -102,13 +105,13 @@
         <section>
           <name>Existing "dns-01" Challenge</name>
           <t>The existing "dns-01" challenge <bcp14>MUST NOT</bcp14> be used to validate ".onion" Special-Use Domain
-            Names.</t>
+            Names, as these domains are not part of the DNS.</t>
         </section>
         <section>
           <name>Existing "http-01" Challenge</name>
           <t>The "http-01" challenge as defined in <xref target="RFC8555" section="8.3"/> can be used to validate a
             ".onion" Special-Use Domain Names, with the modifications defined in this standard, namely
-            <xref target="client-auth" format="title"/>, and <xref target="caa" format="title"/>.</t>
+            <xref target="client-auth"/>, and <xref target="caa"/>.</t>
           <t>The ACME server <bcp14>SHOULD</bcp14> follow redirects; note that these <bcp14>MAY</bcp14> be redirects to
             non ".onion" services, and the server <bcp14>SHOULD</bcp14> honour these.</t>
         </section>
@@ -116,7 +119,7 @@
           <name>Existing "tls-alpn-01" Challenge</name>
           <t>The "tls-alpn-01" challenge as defined in <xref target="RFC8737"/> can be used to validate a ".onion"
             Special-Use Domain Names, with the modifications defined in this standard, namely
-            <xref target="client-auth" format="title"/>, and <xref target="caa" format="title"/>.</t>
+            <xref target="client-auth"/>, and <xref target="caa"/>.</t>
         </section>
       </section>
       <section>
@@ -255,7 +258,7 @@ Content-Type: application/jose+json
 
     <section>
       <name>ACME over hidden services</name>
-      <t>A CA offering certificates to ".onion" Special-Use Domain Names is <bcp14>RECOMMENDED</bcp14> to make their
+      <t>A CA offering certificates to ".onion" Special-Use Domain Names <bcp14>SHOULD</bcp14> make their
         ACME server available as a Tor hidden services. ACME clients <bcp14>SHOULD</bcp14> also support connecting to
         ACME servers over Tor, regardless of their support of "onion-csr-01", as their existing "http-01"
         and "tls-alpn-01" implementations could be used to obtain certificates for ".onion" Special-Use Domain Names.</t>
@@ -267,7 +270,8 @@ Content-Type: application/jose+json
         is necessary to allow restrictions to be placed on certificate issuance.</t>
       <t>To this end a new field is added to the second layer hidden service descriptor
         <xref target="tor-rend-spec-v3" relative="hsdesc-encrypt.html#second-layer-plaintext" section="&quot;Second layer plaintext format&quot;" />
-        with the following format:</t>
+        with the following format (defined using the notation from
+        <xref target="tor-dir-spec-v3" section="&quot;Document meta-format&quot;" relative="outline.html#metaformat"/>):</t>
       <sourcecode>
 "caa" SP flags SP tag SP value NL
 [Any number of times]
@@ -275,13 +279,15 @@ Content-Type: application/jose+json
       <t>The contents of "flag", "tag", and "value" are as per <xref target="RFC8659" section="4.1.1"/>.
         Multiple CAA records <bcp14>MAY</bcp14> be present, as is the case in the DNS. CAA records in a hidden service
         descriptor are to be treated the same by CAs as if they had been in the DNS for the ".onion" Special-Use Domain Name.</t>
-      <t>A hidden service's second layer descriptor using CAA could look something like the following:</t>
+      <t>A hidden service's second layer descriptor using CAA could look something like the following
+        (linebreaks have been added for readability only):</t>
       <sourcecode>
 create2-formats 2
 single-onion-service
 caa 128 issue "test.acmeforonions.org;validationmethods=onion-csr-01"
 caa 0 iodef "mailto:security@example.com"
-introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3KHCZUZ3C6tXDeRfM9SyNY0DlgbF8q+QSaGKCs=
+introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3
+        KHCZUZ3C6tXDeRfM9SyNY0DlgbF8q+QSaGKCs=
 ...
       </sourcecode>
       <section>
@@ -321,7 +327,8 @@ introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3KHCZUZ3C6tX
           - in certain circumstances - would disclose unwanted information about the hidden service operator).</t>
         <t>To this end a new field is added to the first layer hidden service descriptor
           <xref target="tor-rend-spec-v3" section="&quot;First layer plaintext format&quot;" relative="hsdesc-encrypt.html#first-layer-plaintext" />
-          with the following format:</t>
+          with the following format (defined using the notation from
+        <xref target="tor-dir-spec-v3" section="&quot;Document meta-format&quot;" relative="outline.html#metaformat"/>):</t>
         <sourcecode>
 "caa-critical" NL
 [At most once]
@@ -410,12 +417,15 @@ Content-Type: application/json
         </section>
         <section>
           <name>Example in-band CAA</name>
-          <t>Given the following example CAA record set for 5anebu2glyc235wbbop3m2ukzlaptpkq333vdtdvcjpigyb7x2i2m2qd.onion:</t>
+          <t>Given the following example CAA record set for 5anebu2glyc235wbbop3m2ukzlaptpkq333vdtdvcjpigyb7x2i2m2qd.onion
+            (linebreaks have been added for readability only):</t>
           <sourcecode>
-caa 128 issue "test.acmeforonions.org; validationmethods=onion-csr-01"
+caa 128 issue "test.acmeforonions.org;
+            validationmethods=onion-csr-01"
 caa 0 iodef "mailto:example@example.com"
           </sourcecode>
-          <t>The following would be submitted to the ACME server's finalize endpoint</t>
+          <t>The following would be submitted to the ACME server's finalize endpoint
+            (linebreaks have been added for readability only):</t>
           <sourcecode type="http">
 POST /acme/order/TOlocE8rfgo/finalize
 Host: example.com
@@ -431,10 +441,14 @@ Content-Type: application/jose+json
   "payload": base64url({
     "csr": "MIIBPTCBxAIBADBFMQ...FS6aKdZeGsysoCo4H9P",
     "onionCAA": {
-      "5anebu2glyc235wbbop3m2ukzlaptpkq333vdtdvcjpigyb7x2i2m2qd.onion": {
-        "caa": "caa 128 issue \"test.acmeforonions.org; validationmethods=onion-csr-01\"\ncaa 0 iodef \"mailto:example@example.com\"",
+      "5anebu2glyc235wbbop3m2ukzlaptpkq333vdtdvcjpi
+            gyb7x2i2m2qd.onion": {
+        "caa": "caa 128 issue \"test.acmeforonions.org;
+            validationmethods=onion-csr-01\"\n
+            caa 0 iodef \"mailto:example@example.com\"",
         "expiry": 1697210719,
-        "signature": "u_iP6JZ4JZBrzQUKH6lSrWejjRfeQmkTuehc0_FaaTNPAV0RVxpUz9r44DRdy6kgy0ofnx18KIhMrP7N1wpxAA=="
+        "signature": "u_iP6JZ4JZBrzQUKH6lSrWejjRfeQmkTuehc0_FaaTNP
+            AV0RVxpUz9r44DRdy6kgy0ofnx18KIhMrP7N1wpxAA=="
       }
     }
   }),
@@ -647,6 +661,24 @@ Content-Type: application/jose+json
           </front>
         </reference>
 
+        <reference anchor="tor-rend-spec-v2" target="https://spec.torproject.org/rend-spec-v2">
+          <front>
+            <title>Tor Rendezvous Specification - Version 2</title>
+            <author>
+              <organization>The Tor Project</organization>
+            </author>
+          </front>
+        </reference>
+
+        <reference anchor="tor-dir-spec-v3" target="https://spec.torproject.org/dir-spec/index.html">
+          <front>
+            <title>Tor Directory Protocol - Version 3</title>
+            <author>
+              <organization>The Tor Project</organization>
+            </author>
+          </front>
+        </reference>
+
         <reference anchor="cabf-br" target="https://cabforum.org/working-groups/server/baseline-requirements/documents/CA-Browser-Forum-TLS-BR-2.0.6.pdf">
           <front>
             <title>Baseline Requirements for the Issuance and Management of Publicly-Trusted Certificates</title>
@@ -697,7 +729,7 @@ Content-Type: application/jose+json
       <t>With thanks to the Open Technology Fund for funding the work that went into this document.</t>
       <t>The authors also wish to thank the following for their input on this document:</t>
       <ul>
-        <li>Iain R. Learmonth</li>
+        <li>Iain Learmonth</li>
         <li>Jan-Frederik Rieckers</li>
       </ul>
     </section>
