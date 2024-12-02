@@ -4,8 +4,8 @@
 
 Automated Certificate Management Environment              Q. Misell, Ed.
 Internet-Draft                                                  AS207960
-Intended status: Standards Track                         7 November 2024
-Expires: 11 May 2025
+Intended status: Standards Track                         2 December 2024
+Expires: 5 June 2025
 
 
    Automated Certificate Management Environment (ACME) Extensions for
@@ -44,7 +44,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 11 May 2025.
+   This Internet-Draft will expire on 5 June 2025.
 
 Copyright Notice
 
@@ -91,12 +91,15 @@ Table of Contents
        8.2.2.  "tls-alpn-01" Challenge
        8.2.3.  "dns-01" Challenge
      8.3.  Key Authorization with "onion-csr-01"
-     8.4.  Use of Tor for non ".onion" domains
+     8.4.  Use of Tor for non-".onion" domains
      8.5.  Redirects with "http-01"
      8.6.  Security of CAA records
      8.7.  In-band CAA
      8.8.  Access of the Tor network
      8.9.  Anonymity of the ACME client
+       8.9.1.  Avoid unnecessary certificates
+       8.9.2.  Obfuscate subscriber information
+       8.9.3.  Separate ACME account keys
    9.  References
      9.1.  Normative References
      9.2.  Informative References
@@ -106,11 +109,11 @@ Table of Contents
 
 1.  Introduction
 
-   The Tor network has the ability to host "Onion Services"
-   [tor-rend-spec-v3] [tor-address-spec] only accessible via the Tor
-   network.  These use the ".onion" Special-Use Domain Name [RFC7686] to
-   identify these services.  These can be used as any other domain name
-   could, but do not form part of the DNS infrastructure.
+   The Tor network has the ability to host "Onion Services" [tor-spec]
+   only accessible via the Tor network.  These use the ".onion" Special-
+   Use Domain Name [RFC7686] to identify these services.  These can be
+   used as any other domain name could, but do not form part of the DNS
+   infrastructure.
 
    The Automated Certificate Management Environment (ACME) [RFC8555]
    defines challenges for validating control of DNS identifiers, and
@@ -138,10 +141,10 @@ Table of Contents
    [RFC8555] defines the "dns" identifier type.  This identifier type
    MUST be used when requesting a certificate for a ".onion" Special-Use
    Domain Name.  The value of identifier MUST be the textual
-   representation as defined in Part .onion of [tor-address-spec].  The
-   value MAY include subdomain labels.  Version 2 addresses
-   [tor-rend-spec-v2] MUST NOT be used as these are now considered
-   insecure.
+   representation as defined in Part Special Hostnames in Tor - ".onion"
+   of [tor-spec].  The value MAY include subdomain labels.  Version 2
+   addresses [tor-rend-spec-v2] MUST NOT be used as these are now
+   considered insecure.
 
    Example identifiers (linebreaks have been added for readability
    only):
@@ -180,7 +183,7 @@ Table of Contents
    Section 6.
 
    The ACME server SHOULD follow redirects; note that these MAY be
-   redirects to non ".onion" services, and the server SHOULD honour
+   redirects to non-".onion" services, and the server SHOULD honour
    these.  See Section 10.2 of [RFC8555] for security considerations on
    why a server might not want to follow redirects.
 
@@ -204,7 +207,7 @@ Table of Contents
    To this end a new challenge type called "onion-csr-01" is defined,
    with the following fields:
 
-   type (required, string)  The string onion-csr-01
+   type (required, string)  The string "onion-csr-01"
 
    nonce (required, string)  A Base64 [RFC4648] encoded nonce, including
       padding characters.  It MUST contain at least 64 bits of entropy.
@@ -321,8 +324,8 @@ Table of Contents
    To this end, an additional field in the challenge object is defined
    to allow the ACME server to advertise the Ed25519 public key it will
    use (as per Part "Authentication during the introduction phase" of
-   [tor-rend-spec-v3]) to authenticate itself when retrieving the hidden
-   service descriptor.
+   [tor-spec]) to authenticate itself when retrieving the hidden service
+   descriptor.
 
    authKey (optional, object)  The Ed25519 public key encoded as per
       [RFC8037].
@@ -333,11 +336,11 @@ Table of Contents
 
    There is no method to communicate to the CA that client
    authentication is necessary; instead the ACME server MUST attempt to
-   calculate its CLIENT-ID as per Part "Client Behaviour" of
-   [tor-rend-spec-v3].  If no auth-client line in the first layer hidden
-   service descriptor matches the computed client-id then the server
-   MUST assume that the hidden service does not require client
-   authentication and proceed accordingly.
+   calculate its CLIENT-ID as per Part "Client Behaviour" of [tor-spec].
+   If no auth-client line in the first layer hidden service descriptor
+   matches the computed client-id then the server MUST assume that the
+   hidden service does not require client authentication and proceed
+   accordingly.
 
    In the case the Ed25519 public key is novel to the client it will
    have to resign and republish its hidden service descriptor.  It
@@ -348,8 +351,8 @@ Table of Contents
    time as changes in the operation of the Tor network can affect this
    propagation time in the future.  ACME servers MUST NOT expire
    challenges before a reasonable time to allow publication of the new
-   descriptor - this document suggests at least 30 minutes however it is
-   entirely up to operator preference.
+   descriptor - it is RECOMMENDED the server allow at least 30 minutes;
+   however it is entirely up to operator preference.
 
 5.  ACME over hidden services
 
@@ -367,9 +370,9 @@ Table of Contents
    placed on certificate issuance.
 
    To this end a new field is added to the second layer hidden service
-   descriptor Part "Second layer plaintext format" of [tor-rend-spec-v3]
-   with the following format (defined using the notation from Part
-   "Document meta-format" of [tor-dir-spec-v3]):
+   descriptor as defined in Part "Second layer plaintext format" of
+   [tor-spec] with the following format (defined using the notation from
+   Part "Document meta-format" of [tor-spec]):
 
    "caa" SP flags SP tag SP value NL
    [Any number of times]
@@ -381,8 +384,8 @@ Table of Contents
    ".onion" Special-Use Domain Name.
 
    A hidden service's second layer descriptor using CAA could look
-   something like the following (linebreaks have been added for
-   readability only):
+   something like the following (additional linebreaks have been added
+   for readability):
 
    create2-formats 2
    single-onion-service
@@ -420,6 +423,8 @@ Table of Contents
 
    *  e.c.d.onion
 
+   *  a.b.onion
+
 6.2.  When to check CAA
 
    If the hidden service has client authentication enabled then it will
@@ -433,18 +438,18 @@ Table of Contents
 
 6.3.  Preventing mis-issuance by unknown CAs
 
-   In the case of a hidden service requiring client authentication it is
-   impossible to read them without the hidden service trusting a ACME
-   server's public key - as the CAA records are in the second layer
-   descriptor.  A method is necessary to signal that there are CAA
-   records present (but not reveal their contents which - in certain
-   circumstances - would disclose unwanted information about the hidden
-   service operator).
+   In the case of a hidden service requiring client authentication the
+   CA will be unable to read the hidden service's CAA records without
+   the hidden service trusting an ACME server's public key - as the CAA
+   records are in the second layer descriptor.  A method is necessary to
+   signal that there are CAA records present (but not reveal their
+   contents which - in certain circumstances - would unwantedly disclose
+   information about the hidden service operator).
 
    To this end a new field is added to the first layer hidden service
-   descriptor Part "First layer plaintext format" of [tor-rend-spec-v3]
-   with the following format (defined using the notation from Part
-   "Document meta-format" of [tor-dir-spec-v3]):
+   descriptor Part "First layer plaintext format" of [tor-spec] with the
+   following format (defined using the notation from Part "Document
+   meta-format" of [tor-spec]):
 
    "caa-critical" NL
    [At most once]
@@ -468,11 +473,17 @@ Table of Contents
    descriptor to avoid revealing information about the service operator.
 
    If an ACME server receives a validly signed CAA record set in the
-   finalize request it need not check the CAA set in the hidden service
-   descriptor and can proceed with issuance on the basis of the client
-   provided CAA record set only.  An ACME server MAY ignore the client
-   provided record set, and is free to always fetch the record set from
-   the service descriptor.
+   finalize request it MAY proceed with issuance on the basis of the
+   client provided CAA record set only without checking the CAA set in
+   the hidden service.  Alternatively, an ACME server MAY ignore the
+   client provided record set and fetch the record set from the service
+   descriptor.  In any case, the server always MAY fetch the record set
+   from the service descriptor.  If an ACME server receives a validly
+   signed CAA record set in the finalize request it need not check the
+   CAA set in the hidden service descriptor and can proceed with
+   issuance on the basis of the client provided CAA record set only.  An
+   ACME server MAY ignore the client provided record set, and is free to
+   always fetch the record set from the service descriptor.
 
    A new field is defined in the ACME finalize endpoint to contain the
    hidden service's CAA record set for each ".onion" Special-Use Domain
@@ -547,14 +558,14 @@ Table of Contents
 
    Given the following example CAA record set for
    5anebu2glyc235wbbop3m2ukzlaptpkq333vdtdvcjpigyb7x2i2m2qd.onion
-   (linebreaks have been added for readability only):
+   (additional linebreaks have been added for readability):
 
    caa 128 issue "test.acmeforonions.org;
                validationmethods=onion-csr-01"
    caa 0 iodef "mailto:example@example.com"
 
    The following would be submitted to the ACME server's finalize
-   endpoint (linebreaks have been added for readability only):
+   endpoint (additional linebreaks have been added for readability):
 
    POST /acme/order/TOlocE8rfgo/finalize
    Host: example.com
@@ -651,27 +662,28 @@ Table of Contents
 
 8.2.1.  "http-01" Challenge
 
-   The CA would follow the procedure set out in Section 8.3 of [RFC8555]
-   which specifies that the CA should "Dereference the URL using an HTTP
-   GET request".  Given that ".onion" Special-Use Domain Names require
-   special handling to dereference, this de-referencing will fail,
-   disallowing issuance.
+   In the absence of knowledge of this document a CA would follow the
+   procedure set out in Section 8.3 of [RFC8555] which specifies that
+   the CA should "Dereference the URL using an HTTP GET request".  Given
+   that ".onion" Special-Use Domain Names require special handling to
+   dereference, this de-referencing will fail, disallowing issuance.
 
 8.2.2.  "tls-alpn-01" Challenge
 
-   The CA would follow the procedure set out in Section 3 of [RFC8737]
-   which specifies that the CA "resolves the domain name being validated
-   and chooses one of the IP addresses returned for validation".  Given
-   that ".onion" Special-Use Domain Names are not resolvable to IP
-   addresses, this de-referencing will fail, disallowing issuance.
+   In the absence of knowledge of this document a CA would follow the
+   procedure set out in Section 3 of [RFC8737] which specifies that the
+   CA "resolves the domain name being validated and chooses one of the
+   IP addresses returned for validation".  Given that ".onion" Special-
+   Use Domain Names are not resolvable to IP addresses, this de-
+   referencing will fail, disallowing issuance.
 
 8.2.3.  "dns-01" Challenge
 
-   The CA would follow the procedure set out in Section 8.4 of [RFC8555]
-   which specifies that the CA should "query for TXT records for the
-   validation domain name".  Given that ".onion" Special-Use Domain
-   Names are not present in the DNS infrastructure, this query will
-   fail, disallowing issuance.
+   In the absence of knowledge of this document a CA would follow the
+   procedure set out in Section 8.4 of [RFC8555] which specifies that
+   the CA should "query for TXT records for the validation domain name".
+   Given that ".onion" Special-Use Domain Names are not present in the
+   DNS infrastructure, this query will fail, disallowing issuance.
 
 8.3.  Key Authorization with "onion-csr-01"
 
@@ -687,24 +699,25 @@ Table of Contents
    itself, and ACME already requires that the request be signed by the
    account, the key authorization is not necessary.
 
-8.4.  Use of Tor for non ".onion" domains
+8.4.  Use of Tor for non-".onion" domains
 
-   An ACME server MUST NOT utilise Tor for the validation of non
-   ".onion" domains, due to the risk of exit hijacking.
+   An ACME server MUST NOT utilise Tor for the validation of
+   non-".onion" domains, due to the risk of exit hijacking
+   [spoiled-onions].
 
 8.5.  Redirects with "http-01"
 
    A site MAY redirect to another site when completing validation using
-   the "http-01" challenge.  This redirect can be to either another
+   the "http-01" challenge.  This redirect MAY be to either another
    ".onion" Special-Use Domain Name, or to a domain in the public DNS.
    A site operator SHOULD consider the privacy implications of
-   redirecting to a non ".onion" site - namely that the ACME server
+   redirecting to a non-".onion" site - namely that the ACME server
    operator will then be able to learn information about the site
    redirected to that they would not if accessed via a ".onion" Special-
    Use Domain Name, such as its IP address.  If the site redirected to
    is on the same or an adjacent host to the ".onion" Special-Use Domain
-   Name this reveals information [tor-rend-spec-v3] was otherwise
-   designed to protect.
+   Name this reveals information Part Tor Rendezvous Specification -
+   Version 3 of [tor-spec] was otherwise designed to protect.
 
    If an ACME server receives a redirect to a domain in the public DNS
    it MUST NOT utilise Tor to make a connection to it, due to the risk
@@ -716,29 +729,32 @@ Table of Contents
    that only a party with access to the secret key of the hidden service
    could manipulate what is published there.  For more information about
    this process see Part "Hidden service descriptors: encryption format"
-   of [tor-rend-spec-v3].
+   of [tor-spec].
 
 8.7.  In-band CAA
 
    Tor directory servers are inherently untrusted entities, and as such
    there is no difference in the security model for accepting CAA
-   records directly from the ACME client or fetching them over Tor. CAA
-   records are still verified against the same hidden service key.
+   records directly from the ACME client or fetching them over Tor.
+   There is no difference in the security model between accepting CAA
+   records directly from the ACME client and fetching them over Tor; the
+   CAA records are verified using the same hidden service key in either
+   case.
 
 8.8.  Access of the Tor network
 
    The ACME server MUST make its own connection to the hidden service
-   via the Tor network, and MUST NOT outsource this, such as by using
-   Tor2Web.
+   via the Tor network, and MUST NOT outsource this to a third-party
+   service, such as by using Tor2Web.
 
 8.9.  Anonymity of the ACME client
 
    ACME clients requesting certificates for ".onion" Special-Use Domain
-   Names can inadvertently expose the existence of a hidden service on
-   the host requesting certificates to unintended parties - even when
-   features such as ECH [I-D.ietf-tls-esni] are utilised, as the IP
-   addresses of ACME servers are generally well-known, static, and not
-   used for any other purpose.
+   Names not over the Tor network can inadvertently expose to unintended
+   parties the existence of a hidden service on the host requesting
+   certificates to unintended parties - even when features such as ECH
+   [I-D.ietf-tls-esni] are utilised, as the IP addresses of ACME servers
+   are generally well-known, static, and not used for any other purpose.
 
    ACME clients SHOULD connect to ACME servers over the Tor network to
    alleviate this, preferring a hidden service endpoint if the CA
@@ -748,7 +764,27 @@ Table of Contents
    will expose the existence of the Hidden Service publicly due to its
    inclusion in Certificate Transparency logs [RFC9162].  Hidden Service
    operators SHOULD consider the privacy implications of this before
-   requesting certificates.
+   requesting WebPKI certificates.  ACME client developers SHOULD warn
+   users about the risks of CT logged certificates for hidden services.
+
+8.9.1.  Avoid unnecessary certificates
+
+   Not all services will need a publicly trusted WebPKI certificate; for
+   internal or non-public services, operators SHOULD consider using
+   self-signed or privately-trusted certificates that aren't logged to
+   certificate transparency.
+
+8.9.2.  Obfuscate subscriber information
+
+   When an ACME client is registering to an ACME server it SHOULD
+   provide minimal or obfuscated subscriber details to the CA such as a
+   pseudonymous email address, if at all possible.
+
+8.9.3.  Separate ACME account keys
+
+   If a hidden service operator does not want their different hidden
+   services to be correlated by a CA they SHOULD use separate ACME
+   account keys for each hidden service.
 
 9.  References
 
@@ -800,21 +836,12 @@ Table of Contents
               10646", STD 63, RFC 3629, DOI 10.17487/RFC3629, November
               2003, <https://www.rfc-editor.org/info/rfc3629>.
 
-   [tor-address-spec]
-              Nick Mathewson, N., "Special Hostnames in Tor",
-              <https://spec.torproject.org/address-spec>.
-
-   [tor-rend-spec-v3]
-              The Tor Project, "Tor Rendezvous Specification - Version
-              3", <https://spec.torproject.org/rend-spec/index.html>.
+   [tor-spec] The Tor Project, "Tor Specifications",
+              <https://spec.torproject.org/print.html>.
 
    [tor-rend-spec-v2]
               The Tor Project, "Tor Rendezvous Specification - Version
               2", <https://spec.torproject.org/rend-spec-v2>.
-
-   [tor-dir-spec-v3]
-              The Tor Project, "Tor Directory Protocol - Version 3",
-              <https://spec.torproject.org/dir-spec/index.html>.
 
    [cabf-br]  CA/Browser Forum, "Baseline Requirements for the Issuance
               and Management of Publicly-Trusted Certificates",
@@ -826,6 +853,13 @@ Table of Contents
    [onion-services-setup]
               The Tor Project, "Set Up Your Onion Service",
               <https://community.torproject.org/onion-services/setup/>.
+
+   [spoiled-onions]
+              Winter, P., Köwer, R., Mulazzani, M., Huber, M.,
+              Schrittwieser, S., Lindskog, S., and E. Weippl, "Spoiled
+              Onions: Exposing Malicious Tor Exit Relays",
+              DOI 10.1007/978-3-319-08506-7_16, 2014,
+              <https://rdcu.be/d1ZRp>.
 
    [I-D.ietf-tls-esni]
               Rescorla, E., Oku, K., Sullivan, N., and C. A. Wood, "TLS

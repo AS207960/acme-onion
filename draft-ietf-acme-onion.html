@@ -1024,11 +1024,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">ACME for .onion</td>
-<td class="right">November 2024</td>
+<td class="right">December 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Misell</td>
-<td class="center">Expires 11 May 2025</td>
+<td class="center">Expires 5 June 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1041,12 +1041,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-acme-onion-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-11-07" class="published">7 November 2024</time>
+<time datetime="2024-12-02" class="published">2 December 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-05-11">11 May 2025</time></dd>
+<dd class="expires"><time datetime="2025-06-05">5 June 2025</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1092,7 +1092,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 11 May 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 5 June 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1223,7 +1223,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="auto internal xref">8.3</a>.  <a href="#name-key-authorization-with-onio" class="internal xref">Key Authorization with "onion-csr-01"</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4">
-                <p id="section-toc.1-1.8.2.4.1"><a href="#section-8.4" class="auto internal xref">8.4</a>.  <a href="#name-use-of-tor-for-non-onion-do" class="internal xref">Use of Tor for non ".onion" domains</a></p>
+                <p id="section-toc.1-1.8.2.4.1"><a href="#section-8.4" class="auto internal xref">8.4</a>.  <a href="#name-use-of-tor-for-non-onion-do" class="internal xref">Use of Tor for non-".onion" domains</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.5">
                 <p id="section-toc.1-1.8.2.5.1"><a href="#section-8.5" class="auto internal xref">8.5</a>.  <a href="#name-redirects-with-http-01" class="internal xref">Redirects with "http-01"</a></p>
@@ -1239,6 +1239,17 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.9">
                 <p id="section-toc.1-1.8.2.9.1"><a href="#section-8.9" class="auto internal xref">8.9</a>.  <a href="#name-anonymity-of-the-acme-clien" class="internal xref">Anonymity of the ACME client</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.9.2.1">
+                    <p id="section-toc.1-1.8.2.9.2.1.1"><a href="#section-8.9.1" class="auto internal xref">8.9.1</a>.  <a href="#name-avoid-unnecessary-certifica" class="internal xref">Avoid unnecessary certificates</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.9.2.2">
+                    <p id="section-toc.1-1.8.2.9.2.2.1"><a href="#section-8.9.2" class="auto internal xref">8.9.2</a>.  <a href="#name-obfuscate-subscriber-inform" class="internal xref">Obfuscate subscriber information</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.9.2.3">
+                    <p id="section-toc.1-1.8.2.9.2.3.1"><a href="#section-8.9.3" class="auto internal xref">8.9.3</a>.  <a href="#name-separate-acme-account-keys" class="internal xref">Separate ACME account keys</a></p>
+</li>
+                </ul>
 </li>
             </ul>
 </li>
@@ -1270,8 +1281,8 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">The Tor network has the ability to host "Onion Services" <span>[<a href="#tor-rend-spec-v3" class="cite xref">tor-rend-spec-v3</a>]</span>
-        <span>[<a href="#tor-address-spec" class="cite xref">tor-address-spec</a>]</span> only accessible via the Tor network. These use the ".onion"
+<p id="section-1-1">The Tor network has the ability to host "Onion Services" <span>[<a href="#tor-spec" class="cite xref">tor-spec</a>]</span> only accessible via the
+        Tor network. These use the ".onion"
         Special-Use Domain Name <span>[<a href="#RFC7686" class="cite xref">RFC7686</a>]</span> to identify these services. These can be used as any other domain
         name could, but do not form part of the DNS infrastructure.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">The Automated Certificate Management Environment (ACME) <span>[<a href="#RFC8555" class="cite xref">RFC8555</a>]</span> defines challenges for
@@ -1300,9 +1311,9 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-2-1"><span>[<a href="#RFC8555" class="cite xref">RFC8555</a>]</span> defines the "dns" identifier type. This identifier type <span class="bcp14">MUST</span> be used
         when requesting a certificate for a ".onion" Special-Use Domain Name. The value of identifier
         <span class="bcp14">MUST</span> be the textual representation as defined in
-        <span><a href="https://spec.torproject.org/address-spec#onion" class="relref">Part .onion</a> of [<a href="#tor-address-spec" class="cite xref">tor-address-spec</a>]</span>. The value <span class="bcp14">MAY</span> include
-        subdomain labels. Version 2 addresses <span>[<a href="#tor-rend-spec-v2" class="cite xref">tor-rend-spec-v2</a>]</span> <span class="bcp14">MUST NOT</span> be used as these
-        are now considered insecure.<a href="#section-2-1" class="pilcrow">¶</a></p>
+        <span><a href="https://spec.torproject.org/print.html#onion" class="relref">Part Special Hostnames in Tor - ".onion"</a> of [<a href="#tor-spec" class="cite xref">tor-spec</a>]</span>.
+        The value <span class="bcp14">MAY</span> include subdomain labels. Version 2 addresses <span>[<a href="#tor-rend-spec-v2" class="cite xref">tor-rend-spec-v2</a>]</span>
+        <span class="bcp14">MUST NOT</span> be used as these are now considered insecure.<a href="#section-2-1" class="pilcrow">¶</a></p>
 <p id="section-2-2">Example identifiers (linebreaks have been added for readability only):<a href="#section-2-2" class="pilcrow">¶</a></p>
 <div class="lang-json sourcecode" id="section-2-3">
 <pre>
@@ -1349,7 +1360,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
             ".onion" Special-Use Domain Names, with the modifications defined in this standard, namely
             <a href="#client-auth" class="auto internal xref">Section 4</a>, and <a href="#caa" class="auto internal xref">Section 6</a>.<a href="#section-3.1.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.1.2-2">The ACME server <span class="bcp14">SHOULD</span> follow redirects; note that these <span class="bcp14">MAY</span> be redirects to
-            non ".onion" services, and the server <span class="bcp14">SHOULD</span> honour these. See
+            non-".onion" services, and the server <span class="bcp14">SHOULD</span> honour these. See
             <span><a href="https://rfc-editor.org/rfc/rfc8555#section-10.2" class="relref">Section 10.2</a> of [<a href="#RFC8555" class="cite xref">RFC8555</a>]</span> for security considerations on why a server might not want to
             follow redirects.<a href="#section-3.1.2-2" class="pilcrow">¶</a></p>
 </section>
@@ -1375,7 +1386,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-3.2-2">To this end a new challenge type called "onion-csr-01" is defined, with the following fields:<a href="#section-3.2-2" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-3.2-3">
           <dt id="section-3.2-3.1">type (required, string)</dt>
-          <dd style="margin-left: 1.5em" id="section-3.2-3.2">The string <code>onion-csr-01</code><a href="#section-3.2-3.2" class="pilcrow">¶</a>
+          <dd style="margin-left: 1.5em" id="section-3.2-3.2">The string <code>"onion-csr-01"</code><a href="#section-3.2-3.2" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-3.2-3.3">nonce (required, string)</dt>
@@ -1498,7 +1509,7 @@ Content-Type: application/jose+json
         nor enforce CAA with any validation method.<a href="#section-4-1" class="pilcrow">¶</a></p>
 <p id="section-4-2">To this end, an additional field in the challenge object is defined to allow the ACME server to advertise the
         Ed25519 public key it will use (as per
-        <span><a href="https://spec.torproject.org/rend-spec/introduction-protocol.html#INTRO-AUTH" class="relref">Part "Authentication during the introduction phase"</a> of [<a href="#tor-rend-spec-v3" class="cite xref">tor-rend-spec-v3</a>]</span>) to
+        <span><a href="https://spec.torproject.org/print.html#INTRO-AUTH" class="relref">Part "Authentication during the introduction phase"</a> of [<a href="#tor-spec" class="cite xref">tor-spec</a>]</span>) to
         authenticate itself when retrieving the hidden service descriptor.<a href="#section-4-2" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-4-3">
         <dt id="section-4-3.1">authKey (optional, object)</dt>
@@ -1510,7 +1521,7 @@ Content-Type: application/jose+json
         ACME servers <span class="bcp14">MAY</span> re-use public keys for re-validation of the same hidden service.<a href="#section-4-4" class="pilcrow">¶</a></p>
 <p id="section-4-5">There is no method to communicate to the CA that client authentication is necessary; instead the ACME server
         <span class="bcp14">MUST</span> attempt to calculate its CLIENT-ID as per
-        <span><a href="https://spec.torproject.org/rend-spec/hsdesc-encrypt.html#FIRST-LAYER-CLIENT-BEHAVIOR" class="relref">Part "Client Behaviour"</a> of [<a href="#tor-rend-spec-v3" class="cite xref">tor-rend-spec-v3</a>]</span>.
+        <span><a href="https://spec.torproject.org/print.html#FIRST-LAYER-CLIENT-BEHAVIOR" class="relref">Part "Client Behaviour"</a> of [<a href="#tor-spec" class="cite xref">tor-spec</a>]</span>.
         If no <code>auth-client</code> line in the first layer hidden service descriptor matches the computed client-id
         then the server <span class="bcp14">MUST</span> assume that the hidden service does not require client authentication and
         proceed accordingly.<a href="#section-4-5" class="pilcrow">¶</a></p>
@@ -1520,7 +1531,7 @@ Content-Type: application/jose+json
         This should take no more than a few minutes. This specification does not set a fixed time as changes in the
         operation of the Tor network can affect this propagation time in the future. ACME servers
         <span class="bcp14">MUST NOT</span> expire challenges before a reasonable time to allow publication of the new descriptor -
-        this document suggests at least 30 minutes however it is entirely up to operator preference.<a href="#section-4-6" class="pilcrow">¶</a></p>
+        it is <span class="bcp14">RECOMMENDED</span> the server allow at least 30 minutes; however it is entirely up to operator preference.<a href="#section-4-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <section id="section-5">
@@ -1539,10 +1550,10 @@ Content-Type: application/jose+json
       </h2>
 <p id="section-6-1">".onion" Special-Use Domain Name are not part of the DNS, and as such a variation on CAA <span>[<a href="#RFC8659" class="cite xref">RFC8659</a>]</span>
         is necessary to allow restrictions to be placed on certificate issuance.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<p id="section-6-2">To this end a new field is added to the second layer hidden service descriptor
-        <span><a href="https://spec.torproject.org/rend-spec/hsdesc-encrypt.html#second-layer-plaintext" class="relref">Part "Second layer plaintext format"</a> of [<a href="#tor-rend-spec-v3" class="cite xref">tor-rend-spec-v3</a>]</span>
+<p id="section-6-2">To this end a new field is added to the second layer hidden service descriptor as defined in
+        <span><a href="https://spec.torproject.org/print.html#second-layer-plaintext" class="relref">Part "Second layer plaintext format"</a> of [<a href="#tor-spec" class="cite xref">tor-spec</a>]</span>
         with the following format (defined using the notation from
-        <span><a href="https://spec.torproject.org/dir-spec/outline.html#metaformat" class="relref">Part "Document meta-format"</a> of [<a href="#tor-dir-spec-v3" class="cite xref">tor-dir-spec-v3</a>]</span>):<a href="#section-6-2" class="pilcrow">¶</a></p>
+        <span><a href="https://spec.torproject.org/print.html#metaformat" class="relref">Part "Document meta-format"</a> of [<a href="#tor-spec" class="cite xref">tor-spec</a>]</span>):<a href="#section-6-2" class="pilcrow">¶</a></p>
 <div class="sourcecode" id="section-6-3">
 <pre>
 "caa" SP flags SP tag SP value NL
@@ -1553,7 +1564,7 @@ Content-Type: application/jose+json
         Multiple CAA records <span class="bcp14">MAY</span> be present, as is the case in the DNS. CAA records in a hidden service
         descriptor are to be treated the same by CAs as if they had been in the DNS for the ".onion" Special-Use Domain Name.<a href="#section-6-4" class="pilcrow">¶</a></p>
 <p id="section-6-5">A hidden service's second layer descriptor using CAA could look something like the following
-        (linebreaks have been added for readability only):<a href="#section-6-5" class="pilcrow">¶</a></p>
+        (additional linebreaks have been added for readability):<a href="#section-6-5" class="pilcrow">¶</a></p>
 <div class="sourcecode" id="section-6-6">
 <pre>
 create2-formats 2
@@ -1592,6 +1603,8 @@ introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3
 </li>
           <li class="normal" id="section-6.1-5.3">e.c.d.onion<a href="#section-6.1-5.3" class="pilcrow">¶</a>
 </li>
+          <li class="normal" id="section-6.1-5.4">a.b.onion<a href="#section-6.1-5.4" class="pilcrow">¶</a>
+</li>
         </ul>
 </section>
 <section id="section-6.2">
@@ -1608,14 +1621,15 @@ introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3
         <h3 id="name-preventing-mis-issuance-by-">
 <a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-preventing-mis-issuance-by-" class="section-name selfRef">Preventing mis-issuance by unknown CAs</a>
         </h3>
-<p id="section-6.3-1">In the case of a hidden service requiring client authentication it is impossible to read them without the
-          hidden service trusting a ACME server's public key - as the CAA records are in the second layer descriptor.
-          A method is necessary to signal that there are CAA records present (but not reveal their contents which
-          - in certain circumstances - would disclose unwanted information about the hidden service operator).<a href="#section-6.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.3-1">In the case of a hidden service requiring client authentication the CA will be unable to read the hidden
+          service's CAA records without the hidden service trusting an ACME server's public key - as the CAA records are
+          in the second layer descriptor. A method is necessary to signal that there are CAA records present
+          (but not reveal their contents which - in certain circumstances - would unwantedly disclose information
+          about the hidden service operator).<a href="#section-6.3-1" class="pilcrow">¶</a></p>
 <p id="section-6.3-2">To this end a new field is added to the first layer hidden service descriptor
-          <span><a href="https://spec.torproject.org/rend-spec/hsdesc-encrypt.html#first-layer-plaintext" class="relref">Part "First layer plaintext format"</a> of [<a href="#tor-rend-spec-v3" class="cite xref">tor-rend-spec-v3</a>]</span>
+          <span><a href="https://spec.torproject.org/print.html#first-layer-plaintext" class="relref">Part "First layer plaintext format"</a> of [<a href="#tor-spec" class="cite xref">tor-spec</a>]</span>
           with the following format (defined using the notation from
-        <span><a href="https://spec.torproject.org/dir-spec/outline.html#metaformat" class="relref">Part "Document meta-format"</a> of [<a href="#tor-dir-spec-v3" class="cite xref">tor-dir-spec-v3</a>]</span>):<a href="#section-6.3-2" class="pilcrow">¶</a></p>
+        <span><a href="https://spec.torproject.org/print.html#metaformat" class="relref">Part "Document meta-format"</a> of [<a href="#tor-spec" class="cite xref">tor-spec</a>]</span>):<a href="#section-6.3-2" class="pilcrow">¶</a></p>
 <div class="sourcecode" id="section-6.3-3">
 <pre>
 "caa-critical" NL
@@ -1636,7 +1650,12 @@ introduction-point AwAGsAk5nSMpAhRqhMHbTFCTSlfhP8f5PqUhe6DatgMgk7kSL3
           still publish CAA records if its CAA record set includes "iodef", "contactemail", or "contactphone" so that
           this information is still publicly accessible. A hidden service operator <span class="bcp14">MAY</span> also not wish to
           publish a CAA record set in its service descriptor to avoid revealing information about the service operator.<a href="#section-6.4-2" class="pilcrow">¶</a></p>
-<p id="section-6.4-3">If an ACME server receives a validly signed CAA record set in the finalize request it need not check the CAA
+<p id="section-6.4-3">If an ACME server receives a validly signed CAA record set in the finalize request it <span class="bcp14">MAY</span>
+          proceed with issuance on the basis of the client provided CAA record set only without checking the CAA set in
+          the hidden service. Alternatively, an ACME server <span class="bcp14">MAY</span> ignore the client provided record set and fetch the record set from
+   the service descriptor.  In any case, the server always MAY fetch
+   the record set from the service descriptor.
+          If an ACME server receives a validly signed CAA record set in the finalize request it need not check the CAA
           set in the hidden service descriptor and can proceed with issuance on the basis of the client provided CAA
           record set only. An ACME server <span class="bcp14">MAY</span> ignore the client provided record set, and is free to
           always fetch the record set from the service descriptor.<a href="#section-6.4-3" class="pilcrow">¶</a></p>
@@ -1723,7 +1742,7 @@ Content-Type: application/json
 <a href="#section-6.4.2" class="section-number selfRef">6.4.2. </a><a href="#name-example-in-band-caa" class="section-name selfRef">Example in-band CAA</a>
           </h4>
 <p id="section-6.4.2-1">Given the following example CAA record set for 5anebu2glyc235wbbop3m2ukzlaptpkq333vdtdvcjpigyb7x2i2m2qd.onion
-            (linebreaks have been added for readability only):<a href="#section-6.4.2-1" class="pilcrow">¶</a></p>
+            (additional linebreaks have been added for readability):<a href="#section-6.4.2-1" class="pilcrow">¶</a></p>
 <div class="sourcecode" id="section-6.4.2-2">
 <pre>
 caa 128 issue "test.acmeforonions.org;
@@ -1732,7 +1751,7 @@ caa 0 iodef "mailto:example@example.com"
 </pre><a href="#section-6.4.2-2" class="pilcrow">¶</a>
 </div>
 <p id="section-6.4.2-3">The following would be submitted to the ACME server's finalize endpoint
-            (linebreaks have been added for readability only):<a href="#section-6.4.2-3" class="pilcrow">¶</a></p>
+            (additional linebreaks have been added for readability):<a href="#section-6.4.2-3" class="pilcrow">¶</a></p>
 <div class="lang-http sourcecode" id="section-6.4.2-4">
 <pre>
 POST /acme/order/TOlocE8rfgo/finalize
@@ -1884,27 +1903,28 @@ Content-Type: application/jose+json
           <h4 id="name-http-01-challenge">
 <a href="#section-8.2.1" class="section-number selfRef">8.2.1. </a><a href="#name-http-01-challenge" class="section-name selfRef">"http-01" Challenge</a>
           </h4>
-<p id="section-8.2.1-1">The CA would follow the procedure set out in <span><a href="https://rfc-editor.org/rfc/rfc8555#section-8.3" class="relref">Section 8.3</a> of [<a href="#RFC8555" class="cite xref">RFC8555</a>]</span> which specifies that
-            the CA should "Dereference the URL using an HTTP GET request". Given that ".onion" Special-Use Domain Names require
-            special handling to dereference, this de-referencing will fail, disallowing issuance.<a href="#section-8.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-8.2.1-1">In the absence of knowledge of this document a CA would follow the procedure set out in
+            <span><a href="https://rfc-editor.org/rfc/rfc8555#section-8.3" class="relref">Section 8.3</a> of [<a href="#RFC8555" class="cite xref">RFC8555</a>]</span> which specifies that the CA should "Dereference the URL using an
+            HTTP GET request". Given that ".onion" Special-Use Domain Names require special handling to dereference,
+            this de-referencing will fail, disallowing issuance.<a href="#section-8.2.1-1" class="pilcrow">¶</a></p>
 </section>
 <section id="section-8.2.2">
           <h4 id="name-tls-alpn-01-challenge">
 <a href="#section-8.2.2" class="section-number selfRef">8.2.2. </a><a href="#name-tls-alpn-01-challenge" class="section-name selfRef">"tls-alpn-01" Challenge</a>
           </h4>
-<p id="section-8.2.2-1">The CA would follow the procedure set out in <span><a href="https://rfc-editor.org/rfc/rfc8737#section-3" class="relref">Section 3</a> of [<a href="#RFC8737" class="cite xref">RFC8737</a>]</span> which specifies that the
-            CA "resolves the domain name being validated and chooses one of the IP addresses returned for validation".
-            Given that ".onion" Special-Use Domain Names are not resolvable to IP addresses, this de-referencing will
-            fail, disallowing issuance.<a href="#section-8.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-8.2.2-1">In the absence of knowledge of this document a CA would follow the procedure set out in
+            <span><a href="https://rfc-editor.org/rfc/rfc8737#section-3" class="relref">Section 3</a> of [<a href="#RFC8737" class="cite xref">RFC8737</a>]</span> which specifies that the CA "resolves the domain name being validated
+            and chooses one of the IP addresses returned for validation". Given that ".onion" Special-Use Domain Names
+            are not resolvable to IP addresses, this de-referencing will fail, disallowing issuance.<a href="#section-8.2.2-1" class="pilcrow">¶</a></p>
 </section>
 <section id="section-8.2.3">
           <h4 id="name-dns-01-challenge">
 <a href="#section-8.2.3" class="section-number selfRef">8.2.3. </a><a href="#name-dns-01-challenge" class="section-name selfRef">"dns-01" Challenge</a>
           </h4>
-<p id="section-8.2.3-1">The CA would follow the procedure set out in <span><a href="https://rfc-editor.org/rfc/rfc8555#section-8.4" class="relref">Section 8.4</a> of [<a href="#RFC8555" class="cite xref">RFC8555</a>]</span> which specifies that
-            the CA should "query for TXT records for the validation domain name".
-            Given that ".onion" Special-Use Domain Names are not present in the DNS infrastructure, this query will
-            fail, disallowing issuance.<a href="#section-8.2.3-1" class="pilcrow">¶</a></p>
+<p id="section-8.2.3-1">In the absence of knowledge of this document a CA would follow the procedure set out in
+            <span><a href="https://rfc-editor.org/rfc/rfc8555#section-8.4" class="relref">Section 8.4</a> of [<a href="#RFC8555" class="cite xref">RFC8555</a>]</span> which specifies that the CA should "query for TXT records for the
+            validation domain name". Given that ".onion" Special-Use Domain Names are not present in the DNS
+            infrastructure, this query will fail, disallowing issuance.<a href="#section-8.2.3-1" class="pilcrow">¶</a></p>
 </section>
 </section>
 </div>
@@ -1922,22 +1942,22 @@ Content-Type: application/jose+json
 </section>
 <section id="section-8.4">
         <h3 id="name-use-of-tor-for-non-onion-do">
-<a href="#section-8.4" class="section-number selfRef">8.4. </a><a href="#name-use-of-tor-for-non-onion-do" class="section-name selfRef">Use of Tor for non ".onion" domains</a>
+<a href="#section-8.4" class="section-number selfRef">8.4. </a><a href="#name-use-of-tor-for-non-onion-do" class="section-name selfRef">Use of Tor for non-".onion" domains</a>
         </h3>
-<p id="section-8.4-1">An ACME server <span class="bcp14">MUST NOT</span> utilise Tor for the validation of non ".onion" domains, due to the
-          risk of exit hijacking.<a href="#section-8.4-1" class="pilcrow">¶</a></p>
+<p id="section-8.4-1">An ACME server <span class="bcp14">MUST NOT</span> utilise Tor for the validation of non-".onion" domains, due to the
+          risk of exit hijacking <span>[<a href="#spoiled-onions" class="cite xref">spoiled-onions</a>]</span>.<a href="#section-8.4-1" class="pilcrow">¶</a></p>
 </section>
 <section id="section-8.5">
         <h3 id="name-redirects-with-http-01">
 <a href="#section-8.5" class="section-number selfRef">8.5. </a><a href="#name-redirects-with-http-01" class="section-name selfRef">Redirects with "http-01"</a>
         </h3>
 <p id="section-8.5-1">A site <span class="bcp14">MAY</span> redirect to another site when completing validation using the "http-01" challenge.
-          This redirect can be to either another ".onion" Special-Use Domain Name, or to a domain in the public DNS.
-          A site operator <span class="bcp14">SHOULD</span> consider the privacy implications of redirecting to a non ".onion"
+          This redirect <span class="bcp14">MAY</span> be to either another ".onion" Special-Use Domain Name, or to a domain in the public DNS.
+          A site operator <span class="bcp14">SHOULD</span> consider the privacy implications of redirecting to a non-".onion"
           site - namely that the ACME server operator will then be able to learn information about the site redirected to
           that they would not if accessed via a ".onion" Special-Use Domain Name, such as its IP address. If the site
           redirected to is on the same or an adjacent host to the ".onion" Special-Use Domain Name this reveals
-          information <span>[<a href="#tor-rend-spec-v3" class="cite xref">tor-rend-spec-v3</a>]</span> was otherwise designed to protect.<a href="#section-8.5-1" class="pilcrow">¶</a></p>
+          information <span><a href="https://spec.torproject.org/print.html#tor-rendezvous-specification---version-3" class="relref">Part Tor Rendezvous Specification - Version 3</a> of [<a href="#tor-spec" class="cite xref">tor-spec</a>]</span> was otherwise designed to protect.<a href="#section-8.5-1" class="pilcrow">¶</a></p>
 <p id="section-8.5-2">If an ACME server receives a redirect to a domain in the public DNS it <span class="bcp14">MUST NOT</span> utilise Tor
           to make a connection to it, due to the risk of exit hijacking.<a href="#section-8.5-2" class="pilcrow">¶</a></p>
 </section>
@@ -1947,36 +1967,62 @@ Content-Type: application/jose+json
         </h3>
 <p id="section-8.6-1">The second layer descriptor is signed, encrypted and MACed in a way that only a party with access to the
           secret key of the hidden service could manipulate what is published there. For more information about this
-          process see <span><a href="https://spec.torproject.org/rend-spec/hsdesc-encrypt.html" class="relref">Part "Hidden service descriptors: encryption format"</a> of [<a href="#tor-rend-spec-v3" class="cite xref">tor-rend-spec-v3</a>]</span>.<a href="#section-8.6-1" class="pilcrow">¶</a></p>
+          process see <span><a href="https://spec.torproject.org/print.html#HS-DESC-ENC" class="relref">Part "Hidden service descriptors: encryption format"</a> of [<a href="#tor-spec" class="cite xref">tor-spec</a>]</span>.<a href="#section-8.6-1" class="pilcrow">¶</a></p>
 </section>
 <section id="section-8.7">
         <h3 id="name-in-band-caa">
 <a href="#section-8.7" class="section-number selfRef">8.7. </a><a href="#name-in-band-caa" class="section-name selfRef">In-band CAA</a>
         </h3>
 <p id="section-8.7-1">Tor directory servers are inherently untrusted entities, and as such there is no difference in the security
-          model for accepting CAA records directly from the ACME client or fetching them over Tor. CAA records are still
-          verified against the same hidden service key.<a href="#section-8.7-1" class="pilcrow">¶</a></p>
+          model for accepting CAA records directly from the ACME client or fetching them over Tor. There is no
+          difference in the security model between accepting CAA records directly from the ACME client and fetching them
+          over Tor; the CAA records are verified using the same hidden service key in either case.<a href="#section-8.7-1" class="pilcrow">¶</a></p>
 </section>
 <section id="section-8.8">
         <h3 id="name-access-of-the-tor-network">
 <a href="#section-8.8" class="section-number selfRef">8.8. </a><a href="#name-access-of-the-tor-network" class="section-name selfRef">Access of the Tor network</a>
         </h3>
 <p id="section-8.8-1">The ACME server <span class="bcp14">MUST</span> make its own connection to the hidden service via the Tor network,
-          and <span class="bcp14">MUST NOT</span> outsource this, such as by using Tor2Web.<a href="#section-8.8-1" class="pilcrow">¶</a></p>
+          and <span class="bcp14">MUST NOT</span> outsource this to a third-party service, such as by using Tor2Web.<a href="#section-8.8-1" class="pilcrow">¶</a></p>
 </section>
 <section id="section-8.9">
         <h3 id="name-anonymity-of-the-acme-clien">
 <a href="#section-8.9" class="section-number selfRef">8.9. </a><a href="#name-anonymity-of-the-acme-clien" class="section-name selfRef">Anonymity of the ACME client</a>
         </h3>
-<p id="section-8.9-1">ACME clients requesting certificates for ".onion" Special-Use Domain Names can inadvertently expose the
-          existence of a hidden service on the host requesting certificates to unintended parties - even when features
-          such as ECH <span>[<a href="#I-D.ietf-tls-esni" class="cite xref">I-D.ietf-tls-esni</a>]</span> are utilised, as the IP addresses of ACME servers are generally
-          well-known, static, and not used for any other purpose.<a href="#section-8.9-1" class="pilcrow">¶</a></p>
+<p id="section-8.9-1">ACME clients requesting certificates for ".onion" Special-Use Domain Names not over the Tor network can
+          inadvertently expose to unintended parties the existence of a hidden service on the host requesting
+          certificates to unintended parties - even when features such as ECH <span>[<a href="#I-D.ietf-tls-esni" class="cite xref">I-D.ietf-tls-esni</a>]</span> are
+          utilised, as the IP addresses of ACME servers are generally well-known, static, and not used for any other
+          purpose.<a href="#section-8.9-1" class="pilcrow">¶</a></p>
 <p id="section-8.9-2">ACME clients <span class="bcp14">SHOULD</span> connect to ACME servers over the Tor network to alleviate this, preferring
         a hidden service endpoint if the CA provides such a service.<a href="#section-8.9-2" class="pilcrow">¶</a></p>
 <p id="section-8.9-3">If an ACME client requests a publicly trusted WebPKI certificate it will expose the existence of the Hidden
           Service publicly due to its inclusion in Certificate Transparency logs <span>[<a href="#RFC9162" class="cite xref">RFC9162</a>]</span>. Hidden Service
-          operators <span class="bcp14">SHOULD</span> consider the privacy implications of this before requesting certificates.<a href="#section-8.9-3" class="pilcrow">¶</a></p>
+          operators <span class="bcp14">SHOULD</span> consider the privacy implications of this before requesting WebPKI
+          certificates. ACME client developers <span class="bcp14">SHOULD</span> warn users about the risks of CT logged
+          certificates for hidden services.<a href="#section-8.9-3" class="pilcrow">¶</a></p>
+<section id="section-8.9.1">
+          <h4 id="name-avoid-unnecessary-certifica">
+<a href="#section-8.9.1" class="section-number selfRef">8.9.1. </a><a href="#name-avoid-unnecessary-certifica" class="section-name selfRef">Avoid unnecessary certificates</a>
+          </h4>
+<p id="section-8.9.1-1">Not all services will need a publicly trusted WebPKI certificate; for internal or non-public services,
+            operators <span class="bcp14">SHOULD</span> consider using self-signed or privately-trusted certificates that aren't
+            logged to certificate transparency.<a href="#section-8.9.1-1" class="pilcrow">¶</a></p>
+</section>
+<section id="section-8.9.2">
+          <h4 id="name-obfuscate-subscriber-inform">
+<a href="#section-8.9.2" class="section-number selfRef">8.9.2. </a><a href="#name-obfuscate-subscriber-inform" class="section-name selfRef">Obfuscate subscriber information</a>
+          </h4>
+<p id="section-8.9.2-1">When an ACME client is registering to an ACME server it <span class="bcp14">SHOULD</span> provide minimal or obfuscated
+            subscriber details to the CA such as a pseudonymous email address, if at all possible.<a href="#section-8.9.2-1" class="pilcrow">¶</a></p>
+</section>
+<section id="section-8.9.3">
+          <h4 id="name-separate-acme-account-keys">
+<a href="#section-8.9.3" class="section-number selfRef">8.9.3. </a><a href="#name-separate-acme-account-keys" class="section-name selfRef">Separate ACME account keys</a>
+          </h4>
+<p id="section-8.9.3-1">If a hidden service operator does not want their different hidden services to be correlated by a CA they
+            <span class="bcp14">SHOULD</span> use separate ACME account keys for each hidden service.<a href="#section-8.9.3-1" class="pilcrow">¶</a></p>
+</section>
 </section>
 </section>
 </div>
@@ -2027,21 +2073,13 @@ Content-Type: application/jose+json
         <dd>
 <span class="refAuthor">Yergeau, F.</span>, <span class="refTitle">"UTF-8, a transformation format of ISO 10646"</span>, <span class="seriesInfo">STD 63</span>, <span class="seriesInfo">RFC 3629</span>, <span class="seriesInfo">DOI 10.17487/RFC3629</span>, <time datetime="2003-11" class="refDate">November 2003</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc3629">https://www.rfc-editor.org/info/rfc3629</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="tor-address-spec">[tor-address-spec]</dt>
+<dt id="tor-spec">[tor-spec]</dt>
         <dd>
-<span class="refAuthor">Nick Mathewson, N.</span>, <span class="refTitle">"Special Hostnames in Tor"</span>, <span>&lt;<a href="https://spec.torproject.org/address-spec">https://spec.torproject.org/address-spec</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="tor-rend-spec-v3">[tor-rend-spec-v3]</dt>
-        <dd>
-<span class="refAuthor">The Tor Project</span>, <span class="refTitle">"Tor Rendezvous Specification - Version 3"</span>, <span>&lt;<a href="https://spec.torproject.org/rend-spec/index.html">https://spec.torproject.org/rend-spec/index.html</a>&gt;</span>. </dd>
+<span class="refAuthor">The Tor Project</span>, <span class="refTitle">"Tor Specifications"</span>, <span>&lt;<a href="https://spec.torproject.org/print.html">https://spec.torproject.org/print.html</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="tor-rend-spec-v2">[tor-rend-spec-v2]</dt>
         <dd>
 <span class="refAuthor">The Tor Project</span>, <span class="refTitle">"Tor Rendezvous Specification - Version 2"</span>, <span>&lt;<a href="https://spec.torproject.org/rend-spec-v2">https://spec.torproject.org/rend-spec-v2</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="tor-dir-spec-v3">[tor-dir-spec-v3]</dt>
-        <dd>
-<span class="refAuthor">The Tor Project</span>, <span class="refTitle">"Tor Directory Protocol - Version 3"</span>, <span>&lt;<a href="https://spec.torproject.org/dir-spec/index.html">https://spec.torproject.org/dir-spec/index.html</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="cabf-br">[cabf-br]</dt>
       <dd>
@@ -2057,6 +2095,10 @@ Content-Type: application/jose+json
 <dt id="onion-services-setup">[onion-services-setup]</dt>
         <dd>
 <span class="refAuthor">The Tor Project</span>, <span class="refTitle">"Set Up Your Onion Service"</span>, <span>&lt;<a href="https://community.torproject.org/onion-services/setup/">https://community.torproject.org/onion-services/setup/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="spoiled-onions">[spoiled-onions]</dt>
+        <dd>
+<span class="refAuthor">Winter, P.</span>, <span class="refAuthor">Köwer, R.</span>, <span class="refAuthor">Mulazzani, M.</span>, <span class="refAuthor">Huber, M.</span>, <span class="refAuthor">Schrittwieser, S.</span>, <span class="refAuthor">Lindskog, S.</span>, and <span class="refAuthor">E. Weippl</span>, <span class="refTitle">"Spoiled Onions: Exposing Malicious Tor Exit Relays"</span>, <span class="seriesInfo">DOI 10.1007/978-3-319-08506-7_16</span>, <span>2014</span>, <span>&lt;<a href="https://rdcu.be/d1ZRp">https://rdcu.be/d1ZRp</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-tls-esni">[I-D.ietf-tls-esni]</dt>
         <dd>
