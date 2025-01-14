@@ -4,8 +4,8 @@
 
 Automated Certificate Management Environment              Q. Misell, Ed.
 Internet-Draft                                                  AS207960
-Intended status: Standards Track                         13 January 2025
-Expires: 17 July 2025
+Intended status: Standards Track                         14 January 2025
+Expires: 18 July 2025
 
 
    Automated Certificate Management Environment (ACME) Extensions for
@@ -44,7 +44,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 July 2025.
+   This Internet-Draft will expire on 18 July 2025.
 
 Copyright Notice
 
@@ -222,11 +222,14 @@ Table of Contents
 
    {
      "type": "onion-csr-01",
-     "url": "https://example.com/acme/chall/bbc625c5",
+     "url": "https://acme-server.example.onion/acme/chall/bbc625c5",
      "status": "pending",
      "nonce": "bI6/MRqV4gw=",
      "authKey": { ... }
    }
+
+   An "onion-csr-01" MUST NOT be used to issue certificates for non
+   ".onion" Special-Use Domain Names.
 
    Clients prove control over the key associated with the ".onion"
    service by generating a CSR [RFC2986] with the following additional
@@ -277,16 +280,16 @@ Table of Contents
       the DER format.  (Note: Because this field uses base64url, and
       does not include headers, it is different from PEM.)
 
-   POST example.com/acme/chall/bbc625c5
-   Host: example.com
+   POST /acme/chall/bbc625c5
+   Host: acme-server.example.onion
    Content-Type: application/jose+json
 
    {
      "protected": base64url({
        "alg": "ES256",
-       "kid": "https://example.com/acme/acct/evOfKhNU60wg",
+       "kid": "https://acme-server.example.onion/acme/acct/evOfKhNU60wg",
        "nonce": "UQI1PoRi5OuXzxuX7V7wL0",
-       "url": "https://example.com/acme/chall/bbc625c5"
+       "url": "https://acme-server.example.onion/acme/chall/bbc625c5"
      }),
      "payload": base64url({
        "csr": "MIIBPTCBxAIBADBFMQ...FS6aKdZeGsysoCo4H9P"
@@ -548,13 +551,13 @@ Table of Contents
    Content-Type: application/json
 
    {
-     "newNonce": "https://example.com/acme/new-nonce",
-     "newAccount": "https://example.com/acme/new-account",
-     "newOrder": "https://example.com/acme/new-order",
-     "revokeCert": "https://example.com/acme/revoke-cert",
-     "keyChange": "https://example.com/acme/key-change",
+     "newNonce": "https://acme-server.example.onion/acme/new-nonce",
+     "newAccount": "https://acme-server.example.onion/acme/new-account",
+     "newOrder": "https://acme-server.example.onion/acme/new-order",
+     "revokeCert": "https://acme-server.example.onion/acme/revoke-cert",
+     "keyChange": "https://acme-server.example.onion/acme/key-change",
      "meta": {
-       "termsOfService": "https://example.com/acme/terms/2023-10-13",
+       "termsOfService": "https://acme-server.example.onion/acme/terms/2023-10-13",
        "website": "https://acmeforonions.example/",
        "caaIdentities": ["acmeforonions.example"],
        "inBandOnionCAARequired": true
@@ -575,15 +578,15 @@ Table of Contents
    endpoint (additional linebreaks have been added for readability):
 
    POST /acme/order/TOlocE8rfgo/finalize
-   Host: example.com
+   Host: acme-server.example.onion
    Content-Type: application/jose+json
 
    {
      "protected": base64url({
        "alg": "ES256",
-       "kid": "https://example.com/acme/acct/evOfKhNU60wg",
+       "kid": "https://acme-server.example.onion/acme/acct/evOfKhNU60wg",
        "nonce": "MSF2j2nawWHPxxkE3ZJtKQ",
-       "url": "https://example.com/acme/order/TOlocE8rfgo/finalize"
+       "url": "https://acme-server.example.onion/acme/order/TOlocE8rfgo/finalize"
      }),
      "payload": base64url({
        "csr": "MIIBPTCBxAIBADBFMQ...FS6aKdZeGsysoCo4H9P",

@@ -1028,7 +1028,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Misell</td>
-<td class="center">Expires 17 July 2025</td>
+<td class="center">Expires 18 July 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1041,12 +1041,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-acme-onion-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-01-13" class="published">13 January 2025</time>
+<time datetime="2025-01-14" class="published">14 January 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-07-17">17 July 2025</time></dd>
+<dd class="expires"><time datetime="2025-07-18">18 July 2025</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1092,7 +1092,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 17 July 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 18 July 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1378,10 +1378,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
         <h3 id="name-new-onion-csr-01-challenge">
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-new-onion-csr-01-challenge" class="section-name selfRef">New "onion-csr-01" Challenge</a>
         </h3>
-<p id="section-3.2-1">Two methods already defined in ACME and allowed by the CA/BF ("http-01" and "tls-alpn-01") do not allow issuance of wildcard
-          certificates. A ".onion" Special-Use Domain Name can have subdomains (just like any other domain in the DNS),
-          and a site operator may find it useful to have one certificate for all virtual hosts on their site.
-          This new validation method incorporates the specially signed CSR (as defined by
+<p id="section-3.2-1">Two methods already defined in ACME and allowed by the CA/BF ("http-01" and "tls-alpn-01") do not allow
+          issuance of wildcard certificates. A ".onion" Special-Use Domain Name can have subdomains
+          (just like any other domain in the DNS), and a site operator may find it useful to have one certificate for
+          all virtual hosts on their site. This new validation method incorporates the specially signed CSR (as defined by
           <span><a href="https://cabforum.org/working-groups/server/baseline-requirements/documents/CA-Browser-Forum-TLS-BR-2.0.6.pdf#page=124" class="relref">Appendix B.2.b</a> of [<a href="#cabf-br" class="cite xref">cabf-br</a>]</span>) into ACME to allow for the issuance of
           wildcard certificates.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.2-2">To this end a new challenge type called "onion-csr-01" is defined, with the following fields:<a href="#section-3.2-2" class="pilcrow">¶</a></p>
@@ -1407,27 +1407,29 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <pre>
 {
   "type": "onion-csr-01",
-  "url": "https://example.com/acme/chall/bbc625c5",
+  "url": "https://acme-server.example.onion/acme/chall/bbc625c5",
   "status": "pending",
   "nonce": "bI6/MRqV4gw=",
   "authKey": { ... }
 }
 </pre><a href="#section-3.2-4" class="pilcrow">¶</a>
 </div>
-<p id="section-3.2-5">Clients prove control over the key associated with the ".onion" service by generating a CSR
+<p id="section-3.2-5">An "onion-csr-01" <span class="bcp14">MUST NOT</span> be used to issue certificates for non ".onion"
+          Special-Use Domain Names.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
+<p id="section-3.2-6">Clients prove control over the key associated with the ".onion" service by generating a CSR
           <span>[<a href="#RFC2986" class="cite xref">RFC2986</a>]</span> with the following additional extension attributes and signing it with the private
           key of the ".onion" Special-Use
-          Domain Name:<a href="#section-3.2-5" class="pilcrow">¶</a></p>
+          Domain Name:<a href="#section-3.2-6" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.2-6.1">A <code>caSigningNonce</code> attribute containing the nonce provided in the challenge. This
-            <span class="bcp14">MUST</span> be raw bytes, and not the base64 encoded value provided in the challenge object.<a href="#section-3.2-6.1" class="pilcrow">¶</a>
+<li class="normal" id="section-3.2-7.1">A <code>caSigningNonce</code> attribute containing the nonce provided in the challenge. This
+            <span class="bcp14">MUST</span> be raw bytes, and not the base64 encoded value provided in the challenge object.<a href="#section-3.2-7.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-3.2-6.2">An <code>applicantSigningNonce</code> containing a nonce generated by the client. This <span class="bcp14">MUST</span>
-            have at least 64 bits of entropy. This <span class="bcp14">MUST</span> be raw bytes.<a href="#section-3.2-6.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.2-7.2">An <code>applicantSigningNonce</code> containing a nonce generated by the client. This <span class="bcp14">MUST</span>
+            have at least 64 bits of entropy. This <span class="bcp14">MUST</span> be raw bytes.<a href="#section-3.2-7.2" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-3.2-7">These additional attributes have the following format<a href="#section-3.2-7" class="pilcrow">¶</a></p>
-<div class="lang-asn.1 sourcecode" id="section-3.2-8">
+<p id="section-3.2-8">These additional attributes have the following format<a href="#section-3.2-8" class="pilcrow">¶</a></p>
+<div class="lang-asn.1 sourcecode" id="section-3.2-9">
 <pre>
 cabf OBJECT IDENTIFIER ::=
   { joint-iso-itu-t(2) international-organizations(23)
@@ -1450,55 +1452,55 @@ applicantSigningNonce ATTRIBUTE ::= {
   SINGLE VALUE            TRUE
   ID                      { cabf-applicantSigningNonce }
 }
-</pre><a href="#section-3.2-8" class="pilcrow">¶</a>
+</pre><a href="#section-3.2-9" class="pilcrow">¶</a>
 </div>
-<p id="section-3.2-9">The subject of the CSR need not be meaningful and CAs <span class="bcp14">MUST NOT</span> validate its contents.
+<p id="section-3.2-10">The subject of the CSR need not be meaningful and CAs <span class="bcp14">MUST NOT</span> validate its contents.
           The public key presented in this CSR <span class="bcp14">MUST</span> be the public key corresponding to the ".onion"
           Special-Use Domain Name being validated. It <span class="bcp14">MUST NOT</span> be the same public key presented in the
-          CSR to finalize the order.<a href="#section-3.2-9" class="pilcrow">¶</a></p>
-<p id="section-3.2-10">Clients respond with the following object to validate the challenge:<a href="#section-3.2-10" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlParallel" id="section-3.2-11">
-          <dt id="section-3.2-11.1">csr (required, string)</dt>
-          <dd style="margin-left: 1.5em" id="section-3.2-11.2">
+          CSR to finalize the order.<a href="#section-3.2-10" class="pilcrow">¶</a></p>
+<p id="section-3.2-11">Clients respond with the following object to validate the challenge:<a href="#section-3.2-11" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-3.2-12">
+          <dt id="section-3.2-12.1">csr (required, string)</dt>
+          <dd style="margin-left: 1.5em" id="section-3.2-12.2">
             The CSR in the base64url-encoded version of the DER format.
-            (Note: Because this field uses base64url, and does not include headers, it is different from PEM.)<a href="#section-3.2-11.2" class="pilcrow">¶</a>
+            (Note: Because this field uses base64url, and does not include headers, it is different from PEM.)<a href="#section-3.2-12.2" class="pilcrow">¶</a>
 </dd>
         <dd class="break"></dd>
 </dl>
-<div class="lang-http sourcecode" id="section-3.2-12">
+<div class="lang-http sourcecode" id="section-3.2-13">
 <pre>
-POST example.com/acme/chall/bbc625c5
-Host: example.com
+POST /acme/chall/bbc625c5
+Host: acme-server.example.onion
 Content-Type: application/jose+json
 
 {
   "protected": base64url({
     "alg": "ES256",
-    "kid": "https://example.com/acme/acct/evOfKhNU60wg",
+    "kid": "https://acme-server.example.onion/acme/acct/evOfKhNU60wg",
     "nonce": "UQI1PoRi5OuXzxuX7V7wL0",
-    "url": "https://example.com/acme/chall/bbc625c5"
+    "url": "https://acme-server.example.onion/acme/chall/bbc625c5"
   }),
   "payload": base64url({
     "csr": "MIIBPTCBxAIBADBFMQ...FS6aKdZeGsysoCo4H9P"
   }),
   "signature": "Q1bURgJoEslbD1c5...3pYdSMLio57mQNN4"
 }
-</pre><a href="#section-3.2-12" class="pilcrow">¶</a>
+</pre><a href="#section-3.2-13" class="pilcrow">¶</a>
 </div>
-<p id="section-3.2-13">When presented with the CSR the server verifies it in the following manner:<a href="#section-3.2-13" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-3.2-14">
-          <li id="section-3.2-14.1">The CSR is a well formatted PKCS#10 request.<a href="#section-3.2-14.1" class="pilcrow">¶</a>
+<p id="section-3.2-14">When presented with the CSR the server verifies it in the following manner:<a href="#section-3.2-14" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-3.2-15">
+          <li id="section-3.2-15.1">The CSR is a well formatted PKCS#10 request.<a href="#section-3.2-15.1" class="pilcrow">¶</a>
 </li>
-          <li id="section-3.2-14.2">The public key in the CSR corresponds to the ".onion" Special-Use Domain Name being validated.<a href="#section-3.2-14.2" class="pilcrow">¶</a>
+          <li id="section-3.2-15.2">The public key in the CSR corresponds to the ".onion" Special-Use Domain Name being validated.<a href="#section-3.2-15.2" class="pilcrow">¶</a>
 </li>
-          <li id="section-3.2-14.3">The signature over the CSR validates with the ".onion" Special-Use Domain Name public key.<a href="#section-3.2-14.3" class="pilcrow">¶</a>
+          <li id="section-3.2-15.3">The signature over the CSR validates with the ".onion" Special-Use Domain Name public key.<a href="#section-3.2-15.3" class="pilcrow">¶</a>
 </li>
-          <li id="section-3.2-14.4">The caSigningNonce attribute is present and its contents matches the nonce provided to the client.<a href="#section-3.2-14.4" class="pilcrow">¶</a>
+          <li id="section-3.2-15.4">The caSigningNonce attribute is present and its contents matches the nonce provided to the client.<a href="#section-3.2-15.4" class="pilcrow">¶</a>
 </li>
-          <li id="section-3.2-14.5">The applicantSigningNonce attribute is present and contains at least 64 bits of entropy.<a href="#section-3.2-14.5" class="pilcrow">¶</a>
+          <li id="section-3.2-15.5">The applicantSigningNonce attribute is present and contains at least 64 bits of entropy.<a href="#section-3.2-15.5" class="pilcrow">¶</a>
 </li>
         </ol>
-<p id="section-3.2-15">If all of the above are successful then validation succeeds, otherwise it has failed.<a href="#section-3.2-15" class="pilcrow">¶</a></p>
+<p id="section-3.2-16">If all of the above are successful then validation succeeds, otherwise it has failed.<a href="#section-3.2-16" class="pilcrow">¶</a></p>
 </section>
 </section>
 <div id="client-auth">
@@ -1729,13 +1731,13 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "newNonce": "https://example.com/acme/new-nonce",
-  "newAccount": "https://example.com/acme/new-account",
-  "newOrder": "https://example.com/acme/new-order",
-  "revokeCert": "https://example.com/acme/revoke-cert",
-  "keyChange": "https://example.com/acme/key-change",
+  "newNonce": "https://acme-server.example.onion/acme/new-nonce",
+  "newAccount": "https://acme-server.example.onion/acme/new-account",
+  "newOrder": "https://acme-server.example.onion/acme/new-order",
+  "revokeCert": "https://acme-server.example.onion/acme/revoke-cert",
+  "keyChange": "https://acme-server.example.onion/acme/key-change",
   "meta": {
-    "termsOfService": "https://example.com/acme/terms/2023-10-13",
+    "termsOfService": "https://acme-server.example.onion/acme/terms/2023-10-13",
     "website": "https://acmeforonions.example/",
     "caaIdentities": ["acmeforonions.example"],
     "inBandOnionCAARequired": true
@@ -1762,15 +1764,15 @@ caa 0 iodef "mailto:example@example.com"
 <div class="lang-http sourcecode" id="section-6.4.2-4">
 <pre>
 POST /acme/order/TOlocE8rfgo/finalize
-Host: example.com
+Host: acme-server.example.onion
 Content-Type: application/jose+json
 
 {
   "protected": base64url({
     "alg": "ES256",
-    "kid": "https://example.com/acme/acct/evOfKhNU60wg",
+    "kid": "https://acme-server.example.onion/acme/acct/evOfKhNU60wg",
     "nonce": "MSF2j2nawWHPxxkE3ZJtKQ",
-    "url": "https://example.com/acme/order/TOlocE8rfgo/finalize"
+    "url": "https://acme-server.example.onion/acme/order/TOlocE8rfgo/finalize"
   }),
   "payload": base64url({
     "csr": "MIIBPTCBxAIBADBFMQ...FS6aKdZeGsysoCo4H9P",
