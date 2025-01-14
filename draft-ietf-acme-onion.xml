@@ -128,10 +128,10 @@
       </section>
       <section>
         <name>New "onion-csr-01" Challenge</name>
-        <t>Two methods already defined in ACME and allowed by the CA/BF ("http-01" and "tls-alpn-01") do not allow issuance of wildcard
-          certificates. A ".onion" Special-Use Domain Name can have subdomains (just like any other domain in the DNS),
-          and a site operator may find it useful to have one certificate for all virtual hosts on their site.
-          This new validation method incorporates the specially signed CSR (as defined by
+        <t>Two methods already defined in ACME and allowed by the CA/BF ("http-01" and "tls-alpn-01") do not allow
+          issuance of wildcard certificates. A ".onion" Special-Use Domain Name can have subdomains
+          (just like any other domain in the DNS), and a site operator may find it useful to have one certificate for
+          all virtual hosts on their site. This new validation method incorporates the specially signed CSR (as defined by
           <xref target="cabf-br" section="B.2.b" relative="#page=124"/>) into ACME to allow for the issuance of
           wildcard certificates.</t>
         <t>To this end a new challenge type called "onion-csr-01" is defined, with the following fields:</t>
@@ -156,6 +156,8 @@
   "authKey": { ... }
 }
         </sourcecode>
+        <t>An "onion-csr-01" <bcp14>MUST NOT</bcp14> be used to issue certificates for non ".onion"
+          Special-Use Domain Names.</t>
         <t>Clients prove control over the key associated with the ".onion" service by generating a CSR
           <xref target="RFC2986"/> with the following additional extension attributes and signing it with the private
           key of the ".onion" Special-Use
