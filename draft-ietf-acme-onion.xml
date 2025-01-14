@@ -150,7 +150,7 @@
         <sourcecode type="json">
 {
   "type": "onion-csr-01",
-  "url": "https://example.com/acme/chall/bbc625c5",
+  "url": "https://acme-server.example.onion/acme/chall/bbc625c5",
   "status": "pending",
   "nonce": "bI6/MRqV4gw=",
   "authKey": { ... }
@@ -205,16 +205,16 @@ applicantSigningNonce ATTRIBUTE ::= {
           </dd>
         </dl>
         <sourcecode type="http">
-POST example.com/acme/chall/bbc625c5
-Host: example.com
+POST /acme/chall/bbc625c5
+Host: acme-server.example.onion
 Content-Type: application/jose+json
 
 {
   "protected": base64url({
     "alg": "ES256",
-    "kid": "https://example.com/acme/acct/evOfKhNU60wg",
+    "kid": "https://acme-server.example.onion/acme/acct/evOfKhNU60wg",
     "nonce": "UQI1PoRi5OuXzxuX7V7wL0",
-    "url": "https://example.com/acme/chall/bbc625c5"
+    "url": "https://acme-server.example.onion/acme/chall/bbc625c5"
   }),
   "payload": base64url({
     "csr": "MIIBPTCBxAIBADBFMQ...FS6aKdZeGsysoCo4H9P"
@@ -421,13 +421,13 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "newNonce": "https://example.com/acme/new-nonce",
-  "newAccount": "https://example.com/acme/new-account",
-  "newOrder": "https://example.com/acme/new-order",
-  "revokeCert": "https://example.com/acme/revoke-cert",
-  "keyChange": "https://example.com/acme/key-change",
+  "newNonce": "https://acme-server.example.onion/acme/new-nonce",
+  "newAccount": "https://acme-server.example.onion/acme/new-account",
+  "newOrder": "https://acme-server.example.onion/acme/new-order",
+  "revokeCert": "https://acme-server.example.onion/acme/revoke-cert",
+  "keyChange": "https://acme-server.example.onion/acme/key-change",
   "meta": {
-    "termsOfService": "https://example.com/acme/terms/2023-10-13",
+    "termsOfService": "https://acme-server.example.onion/acme/terms/2023-10-13",
     "website": "https://acmeforonions.example/",
     "caaIdentities": ["acmeforonions.example"],
     "inBandOnionCAARequired": true
@@ -448,15 +448,15 @@ caa 0 iodef "mailto:example@example.com"
             (additional linebreaks have been added for readability):</t>
           <sourcecode type="http">
 POST /acme/order/TOlocE8rfgo/finalize
-Host: example.com
+Host: acme-server.example.onion
 Content-Type: application/jose+json
 
 {
   "protected": base64url({
     "alg": "ES256",
-    "kid": "https://example.com/acme/acct/evOfKhNU60wg",
+    "kid": "https://acme-server.example.onion/acme/acct/evOfKhNU60wg",
     "nonce": "MSF2j2nawWHPxxkE3ZJtKQ",
-    "url": "https://example.com/acme/order/TOlocE8rfgo/finalize"
+    "url": "https://acme-server.example.onion/acme/order/TOlocE8rfgo/finalize"
   }),
   "payload": base64url({
     "csr": "MIIBPTCBxAIBADBFMQ...FS6aKdZeGsysoCo4H9P",
